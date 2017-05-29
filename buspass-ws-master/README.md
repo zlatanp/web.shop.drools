@@ -4,7 +4,9 @@
 Web shop application.
 
 ## Technology
-Backend on Java (using SpringBoot) and MongoDB database. On frontend jQuery, Ajax, JS.
+Backend:Java (using SpringBoot with Drools integrated)
+Database: MongoDB
+Frontend: jQuery, Ajax, JS.
 
 ## Screens
 
