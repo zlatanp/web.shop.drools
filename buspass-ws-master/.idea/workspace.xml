@@ -30,14 +30,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="UserRepository.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="UserRepository.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/sctrcd/buspassws/repository/UserRepository.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="320">
-              <caret line="16" column="74" lean-forward="false" selection-start-line="16" selection-start-column="74" selection-end-line="16" selection-end-column="74" />
+            <state relative-caret-position="400">
+              <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="10" column="10" lean-forward="false" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -77,6 +87,7 @@
         <option value="$PROJECT_DIR$/src/main/java/com/sctrcd/buspassws/BusPassApp.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/sctrcd/buspassws/controller/RegistrationController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/sctrcd/buspassws/repository/UserRepository.java" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -661,11 +672,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/sctrcd/buspassws/repository/UserRepository.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="16" column="74" lean-forward="false" selection-start-line="16" selection-start-column="74" selection-end-line="16" selection-end-column="74" />
+        <state relative-caret-position="400">
+          <caret line="20" column="0" lean-forward="true" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="10" column="10" lean-forward="false" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
+          <folding />
         </state>
       </provider>
     </entry>

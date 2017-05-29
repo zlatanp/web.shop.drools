@@ -9,3 +9,15 @@
 *.classpath
 *.project
 *.settings
+logs
+target
+tmp
+.history
+dist
+/.idea
+/*.iml
+/out
+/.idea_modules
+conf/custom.conf
+/bin/
+.cache-*
