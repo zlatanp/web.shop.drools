@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <link rel="stylesheet" href="html/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="html/css/bootstrap-theme.min.css" />
+    <script src="html/js/jquery-3.1.0.min.js"></script>
+    <script src="html/js/jquery.min.js"></script>
+    <script src="html/js/bootstrap.js"></script>
+    <script src="html/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="html/css/animate.css" type="text/css" />
+
+    <link rel="stylesheet" href="html/css/rmodal.css" type="text/css" />
+    <script type="text/javascript" src="html/js/rmodal.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="html/css/looknfeel.css">
+    <meta charset="ISO-8859-1">
+
+    <title>Restaurant Index Page</title>
+    <script type="text/javascript">
+
+var x = document.cookie;
+var delovi = x.split("=");
+var emailUlogovanog = delovi[1];
+
+// if(emailUlogovanog.search("@")!=-1){
+// 	window.location.href="home.html";
+// }
+
+        window.onload = function() {
+            var modal = new RModal(document.getElementById('modal'), {
+                //content: 'Abracadabra'
+                beforeOpen: function(next) {
+                    console.log('beforeOpen');
+                    next();
+                }
+                , afterOpen: function() {
+                    console.log('opened');
+                }
+
+                , beforeClose: function(next) {
+                    console.log('beforeClose');
+                    next();
+                }
+                , afterClose: function() {
+                    console.log('closed');
+                }
+                // , bodyClass: 'modal-open'
+                // , dialogClass: 'modal-dialog modal-dialog-lg'
+                // , dialogOpenClass: 'animated fadeIn'
+                // , dialogCloseClass: 'animated fadeOut'
+
+                // , focus: true
+                // , focusElements: ['input.form-control', 'textarea', 'button.btn-primary']
+
+                // , escapeClose: true
+            });
+
+            document.addEventListener('keydown', function(ev) {
+                modal.keydown(ev);
+            }, false);
+
+            document.getElementById('showModal').addEventListener("click", function(ev) {
+                ev.preventDefault();
+                modal.open();
+            }, false);
+
+            window.modal = modal;
+
+
+        }
+
+
+
+
+    </script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+</div>
+<br>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="form-body">
+                <ul class="nav nav-tabs final-login">
+                    <li class="active"><a data-toggle="tab" href="#sectionA">Sign In</a></li>
+                    <li><a data-toggle="tab" href="#sectionB">Join us!</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div id="sectionA" class="tab-pane fade in active">
+                        <div class="innter-form">
+                            <form class="sa-innate-form" method="post" action="korisnik/login">
+                                <label>Email Address</label>
+                                <input type="email" name="email">
+                                <label>Password</label>
+                                <input type="password" name="password">
+                                <button type="submit" onclick="return ulogujSe()">Sign In</button>
+                                <a href="" id="showModal">Forgot Password?</a>
+                            </form>
+                        </div>
+                        <div class="social-login">
+                            <p>- - - - - - - - - - - - - Sign In With - - - - - - - - - - - - - </p>
+                            <ul>
+                                <li><a href=""><i class="fa fa-facebook"></i> Facebook</a></li>
+                                <li><a href=""><i class="fa fa-google-plus"></i> Google+</a></li>
+                                <li><a href=""><i class="fa fa-twitter"></i> Twitter</a></li>
+                            </ul>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div id="sectionB" class="tab-pane fade">
+                        <div class="innter-form">
+                            <form class="sa-innate-form" action="korisnik/register" method="post">
+                                <label>Name</label>
+                                <input type="text" name="nameRegister">
+                                <label>Lastname</label>
+                                <input type="text" name="lastnameRegister">
+                                <label>Email Address</label>
+                                <input type="email" name="emailRegister">
+                                <label>Password</label>
+                                <input type="password" name="passwordRegister">
+                                <label>Confirm Password</label>
+                                <input type="password" name="password1Register">
+                                <button type="submit" onclick="return registrujSe()">Join now</button>
+                                <p>By clicking Join now, you agree to Restaurant's User Agreement, Privacy Policy, and Cookie Policy.</p>
+                            </form>
+                        </div>
+                        <div class="social-login">
+                            <p>- - - - - - - - - - - - - Register With - - - - - - - - - - - - - </p>
+                            <ul>
+                                <li><a href=""><i class="fa fa-facebook"></i> Facebook</a></li>
+                                <li><a href=""><i class="fa fa-google-plus"></i> Google+</a></li>
+                                <li><a href=""><i class="fa fa-twitter"></i> Twitter</a></li>
+                            </ul>
+                        </div>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-dialog animated">
+        <div class="modal-content">
+            <form class="form-horizontal" method="get" action="korisnik/recover">
+                <div class="modal-header">
+                    <strong>Forgot Password?</strong>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="dummyText" class="control-label col-xs-4">Enter your email adress and we'll send you password:</label>
+                        <div class="input-group col-xs-7">
+                            <input type="text" name="email" id="email" class="form-control" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-default" type="button" onclick="modal.close();">Cancel</button>
+                    <button class="btn btn-primary" type="submit" onclick="modal.close();">Recover password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+
+
+    function ulogujSe(){
+    	var i = document.getElementsByName('email');
+    	var emailValue = i[0].value;
+    	var j = document.getElementsByName('password');
+    	var passValue = j[0].value;
+
+
+//     	if(emailValue!="" && passValue!=""){
+//     	$.ajax({
+//             type: 'POST',
+//             url: 'gost/login',
+//             dataType: 'json',
+//             data: {email : emailValue, password : passValue},
+//     		success: function(data){
+//             	console.log(data);
+//             	alert("Prodavac sa korisnickim imenom "+emailValue+" uspesno obrisan!");
+//             	window.location.replace("restoran.html");
+//            }
+//     	});
+//     	}else{
+//     		alert("Username or password can't be empty!");
+//     	}
+
+	if(emailValue=="" || passValue==""){
+		alert("Username or password can't be empty!");
+		return false;
+    }else{
+    	document.cookie = "emailValue=" + emailValue;
+    	return true;
+    }
+    }
+
+    function registrujSe(){
+    	var i = document.getElementsByName('nameRegister');
+    	var nameValue = i[0].value;
+
+    	var j = document.getElementsByName('lastnameRegister');
+    	var lastnameValue = j[0].value;
+
+    	var k = document.getElementsByName('emailRegister');
+    	var emailValue = k[0].value;
+
+    	var l = document.getElementsByName('passwordRegister');
+    	var passwordValue = l[0].value;
+    	var m = document.getElementsByName('password1Register');
+    	var password1Value = m[0].value;
+
+
+    	if(nameValue=="" || lastnameValue=="" || emailValue=="" || passwordValue=="" || password1Value==""){
+    		alert("You must enter all fields!");
+    		return false;
+        }else{
+        	if(passwordValue.length <8){
+        		alert("Password must contain 8-30 characters!")
+        		return false;
+        	}
+        	if(passwordValue.length > 30){
+        		alert("Password must contain 8-30 characters!")
+        		return false;
+        	}
+
+        	if(passwordValue != password1Value){
+        		alert("Password does not match the confirm password!")
+        		return false;
+        	}
+        	return true;
+        }
+    }
+
+
+    </script>
+
+</body>
+</html>
