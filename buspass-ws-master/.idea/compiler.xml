@@ -9,8 +9,8 @@
         <module name="buspass-ws" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="buspass-ws" target="1.5" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="buspass-ws" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

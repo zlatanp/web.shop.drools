@@ -4,10 +4,14 @@
 
     <link rel="stylesheet" href="html/css/bootstrap.min.css" />
     <link rel="stylesheet" href="html/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="html/css/toastr.css" />
+    <link rel="stylesheet" href="html/css/toastr.min.css" />
     <script src="html/js/jquery-3.1.0.min.js"></script>
     <script src="html/js/jquery.min.js"></script>
     <script src="html/js/bootstrap.js"></script>
     <script src="html/js/bootstrap.min.js"></script>
+    <script src="html/js/toastr.js"></script>
+    <script src="html/js/toastr.min.js"></script>
 
     <link rel="stylesheet" href="html/css/animate.css" type="text/css" />
 
@@ -20,9 +24,9 @@
     <title>Restaurant Index Page</title>
     <script type="text/javascript">
 
-var x = document.cookie;
-var delovi = x.split("=");
-var emailUlogovanog = delovi[1];
+//var x = document.cookie;
+//var delovi = x.split("=");
+//var emailUlogovanog = delovi[1];
 
 // if(emailUlogovanog.search("@")!=-1){
 // 	window.location.href="home.html";
@@ -100,14 +104,14 @@ var emailUlogovanog = delovi[1];
                 <div class="tab-content">
                     <div id="sectionA" class="tab-pane fade in active">
                         <div class="innter-form">
-                            <form class="sa-innate-form" method="post" action="korisnik/login">
+                            <div class="sa-innate-form">
                                 <label>Email Address</label>
                                 <input type="email" name="email">
                                 <label>Password</label>
                                 <input type="password" name="password">
-                                <button type="submit" onclick="return ulogujSe()">Sign In</button>
+                                <button type="submit" onclick="return loginFunction()">Sign In</button>
                                 <a href="" id="showModal">Forgot Password?</a>
-                            </form>
+                            </div>
                         </div>
                         <div class="social-login">
                             <p>- - - - - - - - - - - - - Sign In With - - - - - - - - - - - - - </p>
@@ -121,7 +125,9 @@ var emailUlogovanog = delovi[1];
                     </div>
                     <div id="sectionB" class="tab-pane fade">
                         <div class="innter-form">
-                            <form class="sa-innate-form" action="korisnik/register" method="post">
+                            <div class="sa-innate-form" >
+                                <label>Username</label>
+                                <input type="text" name="usernameRegister">
                                 <label>Name</label>
                                 <input type="text" name="nameRegister">
                                 <label>Lastname</label>
@@ -132,9 +138,9 @@ var emailUlogovanog = delovi[1];
                                 <input type="password" name="passwordRegister">
                                 <label>Confirm Password</label>
                                 <input type="password" name="password1Register">
-                                <button type="submit" onclick="return registrujSe()">Join now</button>
+                                <button type="submit" onclick="return registerFunction()">Join now</button>
                                 <p>By clicking Join now, you agree to Restaurant's User Agreement, Privacy Policy, and Cookie Policy.</p>
-                            </form>
+                            </div>
                         </div>
                         <div class="social-login">
                             <p>- - - - - - - - - - - - - Register With - - - - - - - - - - - - - </p>
@@ -182,7 +188,7 @@ var emailUlogovanog = delovi[1];
 <script>
 
 
-    function ulogujSe(){
+    function loginFunction(){
     	var i = document.getElementsByName('email');
     	var emailValue = i[0].value;
     	var j = document.getElementsByName('password');
@@ -214,7 +220,7 @@ var emailUlogovanog = delovi[1];
     }
     }
 
-    function registrujSe(){
+    function registerFunction(){
     	var i = document.getElementsByName('nameRegister');
     	var nameValue = i[0].value;
 
@@ -229,8 +235,11 @@ var emailUlogovanog = delovi[1];
     	var m = document.getElementsByName('password1Register');
     	var password1Value = m[0].value;
 
+    	var n = document.getElementsByName('usernameRegister');
+    	var usernameValue = n[0].value;
 
-    	if(nameValue=="" || lastnameValue=="" || emailValue=="" || passwordValue=="" || password1Value==""){
+
+    	if(usernameValue == "" || nameValue=="" || lastnameValue=="" || emailValue=="" || passwordValue=="" || password1Value==""){
     		alert("You must enter all fields!");
     		return false;
         }else{
@@ -247,7 +256,37 @@ var emailUlogovanog = delovi[1];
         		alert("Password does not match the confirm password!")
         		return false;
         	}
-        	return true;
+
+
+        	$.ajax({
+            type: 'POST',
+            url: 'user/register',
+            dataType: 'json',
+            data: {username : usernameValue, name : nameValue, surname : lastnameValue, email : emailValue, pass : passwordValue, passRepeat : password1Value},
+    		 success: function(data){
+            			console.log(data);
+            			//location.reload();
+    		 },
+    		 complete: function(data){
+    		            var response = data.responseText;
+    		            console.log(response);
+    		            if(response == "nill")
+    		                toastr.error("Some fields are empty!")
+
+    		            if(response == "passwordmatch")
+    		                toastr.error("Password doesn't match!")
+
+    		             if(response == "used")
+    		                toastr.info("Username already used!")
+
+    		            if(response == "done"){
+    		                toastr.success("Successful registration!")
+    		                setTimeout(location.reload.bind(location), 2500);
+    		            }
+
+    		 }
+    	});
+
         }
     }
 

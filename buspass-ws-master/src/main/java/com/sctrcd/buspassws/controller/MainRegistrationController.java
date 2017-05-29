@@ -6,20 +6,51 @@ import com.sctrcd.buspassws.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
 import java.util.Date;
 
 /**
  * Created by zlatan on 29.5.17..
  */
 @RestController
-@RequestMapping("/register")
-public class RegistrationController {
+@RequestMapping("/user")
+public class MainRegistrationController {
 
 
     @Autowired
     private UserRepository repository;
+
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json")
+    public String register(@RequestParam("username") String username, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("email") String email, @RequestParam("pass") String pass, @RequestParam("passRepeat") String passRepeat){
+
+        System.out.println(username + name + surname + email + pass + passRepeat);
+        if(username.isEmpty() || name.isEmpty() || surname.isEmpty() || email.isEmpty() || pass.isEmpty() || passRepeat.isEmpty())
+            return "nill";
+
+        if(!pass.equals(passRepeat))
+            return "passwordmatch";
+
+        User u = repository.findByUsername(username);
+        if(u != null) {
+            return "used";
+        }else {
+            u = new User(username, pass, name, surname, UserType.BUYER, new Date());
+            repository.save(u);
+
+            return "done";
+        }
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
+    public void login(){
+
+
+    }
+
 
     @RequestMapping(value = "/test",method = RequestMethod.GET, produces = "application/json")
     public void test() {
