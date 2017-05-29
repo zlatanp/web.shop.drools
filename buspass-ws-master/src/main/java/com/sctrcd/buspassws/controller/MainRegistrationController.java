@@ -64,6 +64,20 @@ public class MainRegistrationController {
         }
     }
 
+    @RequestMapping(value = "/info", method = RequestMethod.GET, produces = "application/json")
+    public User profileInfo(@RequestParam("username") String username){
+
+        if(username.isEmpty())
+            return null;
+
+        User u = repository.findByUsername(username);
+        if(u==null){
+            return null;
+        }else{
+            return u;
+        }
+    }
+
 
     @RequestMapping(value = "/test",method = RequestMethod.GET, produces = "application/json")
     public void test() {

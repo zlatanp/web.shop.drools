@@ -25,10 +25,10 @@
     <script type="text/javascript">
 
 var x = document.cookie;
-var parts = x.split("=");
+var parts = x.split("username@");
 var cookie = parts[1];
 
-if(cookie.search("@")!=-1){
+if("undefined" !== typeof cookie){
     window.location.href="home.html";
 }
 

@@ -91,15 +91,15 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", type=" + type +
-                ", dateOfRegistration=" + dateOfRegistration +
-                ", buyerProfile=" + buyerProfile +
+        return "{" +
+                "id:'" + id + '\'' +
+                ", username:'" + username + '\'' +
+                ", password:'" + password + '\'' +
+                ", name:'" + name + '\'' +
+                ", surname:'" + surname + '\'' +
+                ", type:" + type +
+                ", dateOfRegistration:" + dateOfRegistration +
+                ", buyerProfile:" + buyerProfile +
                 '}';
     }
 }
