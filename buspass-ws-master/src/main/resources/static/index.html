@@ -21,16 +21,16 @@
     <link rel="stylesheet" type="text/css" href="html/css/looknfeel.css">
     <meta charset="ISO-8859-1">
 
-    <title>Restaurant Index Page</title>
+    <title>Index Page</title>
     <script type="text/javascript">
 
-//var x = document.cookie;
-//var delovi = x.split("=");
-//var emailUlogovanog = delovi[1];
+var x = document.cookie;
+var parts = x.split("=");
+var cookie = parts[1];
 
-// if(emailUlogovanog.search("@")!=-1){
-// 	window.location.href="home.html";
-// }
+if(cookie.search("@")!=-1){
+    window.location.href="home.html";
+}
 
         window.onload = function() {
             var modal = new RModal(document.getElementById('modal'), {
@@ -74,10 +74,6 @@
 
 
         }
-
-
-
-
     </script>
 </head>
 <body>
@@ -105,8 +101,8 @@
                     <div id="sectionA" class="tab-pane fade in active">
                         <div class="innter-form">
                             <div class="sa-innate-form">
-                                <label>Email Address</label>
-                                <input type="email" name="email">
+                                <label>Username</label>
+                                <input type="text" name="username">
                                 <label>Password</label>
                                 <input type="password" name="password">
                                 <button type="submit" onclick="return loginFunction()">Sign In</button>
@@ -189,35 +185,47 @@
 
 
     function loginFunction(){
-    	var i = document.getElementsByName('email');
-    	var emailValue = i[0].value;
+    	var i = document.getElementsByName('username');
+    	var usernameValue = i[0].value;
     	var j = document.getElementsByName('password');
     	var passValue = j[0].value;
 
 
-//     	if(emailValue!="" && passValue!=""){
-//     	$.ajax({
-//             type: 'POST',
-//             url: 'gost/login',
-//             dataType: 'json',
-//             data: {email : emailValue, password : passValue},
-//     		success: function(data){
-//             	console.log(data);
-//             	alert("Prodavac sa korisnickim imenom "+emailValue+" uspesno obrisan!");
-//             	window.location.replace("restoran.html");
-//            }
-//     	});
-//     	}else{
-//     		alert("Username or password can't be empty!");
-//     	}
+     	if(usernameValue!="" && passValue!=""){
+     	$.ajax({
+             type: 'POST',
+             url: 'user/login',
+             dataType: 'json',
+             data: {username : usernameValue, password : passValue},
+     		success: function(data){
+             	console.log(data);
+             	//alert("Prodavac sa korisnickim imenom "+emailValue+" uspesno obrisan!");
+             	//window.location.replace("restoran.html");
+            },
+            complete: function(data){
+    		            var response = data.responseText;
+    		            console.log(response);
+    		            if(response == "nill")
+    		                toastr.error("Some fields are empty!")
 
-	if(emailValue=="" || passValue==""){
-		alert("Username or password can't be empty!");
-		return false;
-    }else{
-    	document.cookie = "emailValue=" + emailValue;
-    	return true;
-    }
+    		            if(response == "nouser")
+    		                toastr.error("User with username: " +usernameValue+ " does not exist!")
+
+    		             if(response == "badpass")
+    		                toastr.info("Bad password!")
+
+    		            if(response == "ok"){
+    		                toastr.success("Successful login!")
+    		                document.cookie = "username@" + usernameValue;
+    		                setTimeout(location.reload.bind(location), 2000);
+    		            }
+
+    		 }
+     	});
+     	}else{
+     		toastr.error("Username or password can't be empty!");
+     	}
+
     }
 
     function registerFunction(){
@@ -240,20 +248,20 @@
 
 
     	if(usernameValue == "" || nameValue=="" || lastnameValue=="" || emailValue=="" || passwordValue=="" || password1Value==""){
-    		alert("You must enter all fields!");
+    		toastr.error("You must enter all fields!");
     		return false;
         }else{
         	if(passwordValue.length <8){
-        		alert("Password must contain 8-30 characters!")
+        		toastr.error("Password must contain 8-30 characters!")
         		return false;
         	}
         	if(passwordValue.length > 30){
-        		alert("Password must contain 8-30 characters!")
+        		toastr.error("Password must contain 8-30 characters!")
         		return false;
         	}
 
         	if(passwordValue != password1Value){
-        		alert("Password does not match the confirm password!")
+        		toastr.error("Password does not match the confirm password!")
         		return false;
         	}
 
@@ -279,7 +287,7 @@
     		             if(response == "used")
     		                toastr.info("Username already used!")
 
-    		            if(response == "done"){
+    		            if(response == "ok"){
     		                toastr.success("Successful registration!")
     		                setTimeout(location.reload.bind(location), 2500);
     		            }

@@ -41,14 +41,27 @@ public class MainRegistrationController {
             u = new User(username, pass, name, surname, UserType.BUYER, new Date());
             repository.save(u);
 
-            return "done";
+            return "ok";
         }
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = "application/json")
-    public void login(){
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password){
 
+        System.out.println(username + password);
+        if(username.isEmpty() || password.isEmpty())
+            return "nill";
 
+        User u = repository.findByUsername(username);
+        if(u == null) {
+            return "nouser";
+        }else{
+            if(!u.getPassword().equals(password)){
+                return "badpass";
+            }else{
+                return "ok";
+            }
+        }
     }
 
 
