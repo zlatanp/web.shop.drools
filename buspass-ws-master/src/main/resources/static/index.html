@@ -199,8 +199,6 @@ if(cookie.search("@")!=-1){
              data: {username : usernameValue, password : passValue},
      		success: function(data){
              	console.log(data);
-             	//alert("Prodavac sa korisnickim imenom "+emailValue+" uspesno obrisan!");
-             	//window.location.replace("restoran.html");
             },
             complete: function(data){
     		            var response = data.responseText;
