@@ -1,11 +1,13 @@
 package com.sctrcd.buspassws.model;
 
 import com.sctrcd.buspassws.enumeration.UserType;
+import org.springframework.data.annotation.Id;
 
 import java.util.Date;
 
 public class User {
 
+    @Id
     private String id;
     private String username;
     private String password;

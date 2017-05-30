@@ -1,11 +1,15 @@
 package com.sctrcd.buspassws.model;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.ArrayList;
 
 public class ItemCategory {
 
+    @Id
 	private String code;
-	private ArrayList<ItemCategory> subcategory = new ArrayList<ItemCategory>();
+	private String name;
+	private String supercategory;
 	private int maxDiscount;
 	
 	
@@ -13,10 +17,11 @@ public class ItemCategory {
 		super();
 	}
 	
-	public ItemCategory(String code, ArrayList<ItemCategory> subcategory, int maxDiscount) {
+	public ItemCategory(String code, String name, String supercategory, int maxDiscount) {
 		super();
 		this.code = code;
-		this.subcategory = subcategory;
+		this.name = name;
+		this.supercategory = supercategory;
 		this.maxDiscount = maxDiscount;
 	}
 
@@ -28,12 +33,12 @@ public class ItemCategory {
 		this.code = code;
 	}
 
-	public ArrayList<ItemCategory> getSubcategory() {
-		return subcategory;
+	public String getSuperCategory() {
+		return supercategory;
 	}
 
-	public void setSubcategory(ArrayList<ItemCategory> subcategory) {
-		this.subcategory = subcategory;
+	public void setSuperCategory(String supercategory) {
+		this.supercategory = supercategory;
 	}
 
 	public int getMaxDiscount() {
@@ -43,6 +48,8 @@ public class ItemCategory {
 	public void setMaxDiscount(int maxDiscount) {
 		this.maxDiscount = maxDiscount;
 	}
-	
-	
+
+	public String getName() { return name; }
+
+	public void setName(String name) { this.name = name; }
 }

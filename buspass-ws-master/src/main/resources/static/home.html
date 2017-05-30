@@ -144,18 +144,42 @@
         </div>
     </div>
 
-    <div id="dialog" title="Modify artist">
+    <div id="dialog" title="Add new category">
+        <p>Code</p>
+        <input name="dCode" type="text" id="dCode">
+        <br>
         <p>Name</p>
-        <input name="name" type="text" id="Dname">
+        <input name="dName" type="text" id="dName">
         <br>
-        <p>Surname</p>
-        <input name="surname" type="text" id="Dsurname">
+        <p>Max Discount</p>
+        <input name="dMaxDiscount" type="number" id="dMaxDiscount">
         <br>
-        <p>Hit</p>
-        <input name="hit" type="text" id="Dhit">
+        <p>Parent Category</p>
+        <select name="dSupCategory" id="dSupCategory">
+            <option value="null">No Super Category</option>
+        </select>
         <br>
         <br>
-        <button id="dialogModify">Save</button>
+        <button onclick="return addNewCategory()" id="dialogAdd">Save</button>
+    </div>
+
+    <div id="dialog2" title="Edit category">
+        <p>Code</p>
+        <input name="dCode2" type="text" id="dCode2">
+        <br>
+        <p>Name</p>
+        <input name="dName2" type="text" id="dName2">
+        <br>
+        <p>Max Discount</p>
+        <input name="dMaxDiscount2" type="number" id="dMaxDiscount2">
+        <br>
+        <p>Parent Category</p>
+        <select name="dSupCategory2" id="dSupCategory2">
+            <option value="null">No Super Category</option>
+        </select>
+        <br>
+        <br>
+        <button onclick="return updateCategory()" id="dialogAdd2">Save</button>
     </div>
 </div>
 </body>
