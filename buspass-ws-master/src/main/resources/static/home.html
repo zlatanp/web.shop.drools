@@ -14,6 +14,11 @@
     <script src="html/js/toastr.min.js"></script>
     <script src="html/js/homescript.js"></script>
 
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" />
+
+
     <meta charset="UTF-8">
     <title>WebShop Home</title>
 
@@ -125,7 +130,6 @@
                 <div class="form-group" id="center">
 
                 </div>
-
             </form>
         </div>
 
@@ -138,6 +142,20 @@
 
             </form>
         </div>
+    </div>
+
+    <div id="dialog" title="Modify artist">
+        <p>Name</p>
+        <input name="name" type="text" id="Dname">
+        <br>
+        <p>Surname</p>
+        <input name="surname" type="text" id="Dsurname">
+        <br>
+        <p>Hit</p>
+        <input name="hit" type="text" id="Dhit">
+        <br>
+        <br>
+        <button id="dialogModify">Save</button>
     </div>
 </div>
 </body>
