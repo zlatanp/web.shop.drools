@@ -214,7 +214,19 @@ if("undefined" !== typeof cookie){
 
     		            if(response == "ok"){
     		                toastr.success("Successful login!")
-    		                document.cookie = "username@" + usernameValue;
+    		                document.cookie = "username@buyer#" + usernameValue;
+    		                setTimeout(location.reload.bind(location), 1500);
+    		            }
+
+    		            if(response == "manager"){
+    		                toastr.success("Successful login!")
+    		                document.cookie = "username@manager#" + usernameValue;
+    		                setTimeout(location.reload.bind(location), 1500);
+    		            }
+
+    		            if(response == "seller"){
+    		                toastr.success("Successful login!")
+    		                document.cookie = "username@seller#" + usernameValue;
     		                setTimeout(location.reload.bind(location), 1500);
     		            }
 

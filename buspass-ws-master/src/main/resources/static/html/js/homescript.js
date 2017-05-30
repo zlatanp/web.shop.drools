@@ -1,6 +1,13 @@
 var x = document.cookie;
 var parts = x.split("username@");
-var username = parts[1];
+var second = parts[1];
+
+var username;
+var type;
+var pom = second.split("#");
+type = pom[0];
+username = pom[1];
+
 
 $(document).ready(function(){
    $('#usernamePlaceholder').html('<span class="glyphicon glyphicon-user"></span> ' + username);
