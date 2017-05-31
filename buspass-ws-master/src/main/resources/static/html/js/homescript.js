@@ -241,6 +241,7 @@ function updateCategory(){
 
 function loadAllCategories(){
     var subcat = new Array();
+    var subsubcat = new Array();
     var getOver = false;
     $('#categories').html('<h4>Categories:<br></h4><br>');
     $.ajax({
@@ -252,17 +253,30 @@ function loadAllCategories(){
                     console.log(data);
                     for(var i =0; i<data.length;i++){
                         getOver = false;
-                        for(var r = 0; r<subcat.length;r++){
+
+                        for(var r = 0; r<subcat.length;r++){ //Subcategory
                             if(subcat[r] == data[i].name)
                             getOver = true;
                         }
 
+                        for(var e = 0; e<subsubcat.length;e++){ //SubSubcategory
+                             if(subsubcat[e] == data[i].name)
+                                getOver = true;
+                        }
+
                         if(r == subcat.length && !getOver){
                             $('#categories').append('<h5>* '+ data[i].name +'</h5>');
-                            for(var j =i; j<data.length;j++){
+                            for(var j =i; j<data.length;j++){ //Do u have subcategory
                                 if(data[j].superCategory == data[i].name){
                                     $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;* '+ data[j].name +'</h5>');
                                     subcat.push(data[j].name);
+                                    //treca podkat
+                                    for(var z =j; z<data.length;z++){   //Do your subcategory have subcategory
+                                         if(data[z].superCategory == data[j].name){
+                                             $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* '+ data[z].name +'</h5>');
+                                             subsubcat.push(data[z].name);
+                                         }
+                                    }
                                 }
                             }
                         }
