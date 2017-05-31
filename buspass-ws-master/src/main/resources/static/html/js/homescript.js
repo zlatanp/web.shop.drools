@@ -14,6 +14,9 @@ $(document).ready(function(){
    if(type === "manager")
         managerOnload();
 
+    //TODO ajax call for reading categories
+    loadAllCategories();
+
    $( function() {
        $("#dialog").dialog({
             autoOpen: false,
@@ -233,4 +236,40 @@ function updateCategory(){
 
         $("#dialog2").dialog('close');
         itemCategories();
+        loadAllCategories();
+}
+
+function loadAllCategories(){
+    var subcat = new Array();
+    var getOver = false;
+    $('#categories').html('<h4>Categories:<br></h4><br>');
+    $.ajax({
+            type: 'GET',
+            url: 'itemCategory/getAll',
+            dataType: 'json',
+            success: function(data){
+                if(data.length > 0){
+                    console.log(data);
+                    for(var i =0; i<data.length;i++){
+                        getOver = false;
+                        for(var r = 0; r<subcat.length;r++){
+                            if(subcat[r] == data[i].name)
+                            getOver = true;
+                        }
+
+                        if(r == subcat.length && !getOver){
+                            $('#categories').append('<h5>* '+ data[i].name +'</h5>');
+                            for(var j =i; j<data.length;j++){
+                                if(data[j].superCategory == data[i].name){
+                                    $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;* '+ data[j].name +'</h5>');
+                                    subcat.push(data[j].name);
+                                }
+                            }
+                        }
+
+
+                    }
+                }
+            }
+    });
 }
