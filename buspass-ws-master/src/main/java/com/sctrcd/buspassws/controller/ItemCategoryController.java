@@ -3,7 +3,6 @@ package com.sctrcd.buspassws.controller;
 import com.sctrcd.buspassws.model.ItemCategory;
 import com.sctrcd.buspassws.repository.ItemCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;

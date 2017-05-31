@@ -1,13 +1,14 @@
 package com.sctrcd.buspassws.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ActionEvent {
 
 	private String code;
 	private String name;
-	private String from;
-	private String to;
+	private Date from;
+	private Date to;
 	private int discount;
 	private ArrayList<ItemCategory> category = new ArrayList<ItemCategory>();
 	
@@ -16,7 +17,7 @@ public class ActionEvent {
 		super();
 	}
 	
-	public ActionEvent(String code, String name, String from, String to, int discount,
+	public ActionEvent(String code, String name, Date from, Date to, int discount,
 			ArrayList<ItemCategory> category) {
 		super();
 		this.code = code;
@@ -43,19 +44,19 @@ public class ActionEvent {
 		this.name = name;
 	}
 
-	public String getFrom() {
+	public Date getFrom() {
 		return from;
 	}
 
-	public void setFrom(String from) {
+	public void setFrom(Date from) {
 		this.from = from;
 	}
 
-	public String getTo() {
+	public Date getTo() {
 		return to;
 	}
 
-	public void setTo(String to) {
+	public void setTo(Date to) {
 		this.to = to;
 	}
 

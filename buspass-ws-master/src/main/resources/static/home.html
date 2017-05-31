@@ -150,8 +150,8 @@
         <p>Name</p>
         <input name="dName" type="text" id="dName">
         <br>
-        <p>Max Discount</p>
-        <input name="dMaxDiscount" type="number" id="dMaxDiscount">
+        <p>Max Discount (in %)</p>
+        <input name="dMaxDiscount" min="0" type="number" id="dMaxDiscount">
         <br>
         <p>Parent Category</p>
         <select name="dSupCategory" id="dSupCategory">
@@ -169,8 +169,8 @@
         <p>Name</p>
         <input name="dName2" type="text" id="dName2">
         <br>
-        <p>Max Discount</p>
-        <input name="dMaxDiscount2" type="number" id="dMaxDiscount2">
+        <p>Max Discount (in %)</p>
+        <input name="dMaxDiscount2" min="0" type="number" id="dMaxDiscount2">
         <br>
         <p>Parent Category</p>
         <select name="dSupCategory2" id="dSupCategory2">
@@ -179,6 +179,52 @@
         <br>
         <br>
         <button onclick="return updateCategory()" id="dialogAdd2">Save</button>
+    </div>
+
+    <div id="dialog3" title="Add category">
+        <p>Code</p>
+        <input name="dCode3" type="text" id="dCode3">
+        <br>
+        <p>Name</p>
+        <input name="dName3" type="text" id="dName3">
+        <br>
+        <br>
+        <p>Consumption Treshold:</p>
+        <p>From (value in $)</p>
+        <input name="from3" type="number" min="0" id="from3">
+        <br>
+        <p>To (value in $)</p>
+        <input name="to3" type="number" min="0" id="to3">
+        <br>
+        <p>Coefficient (in %)</p>
+        <input name="coefficientC3" type="number" min="0" id="coefficientC3">
+        <br>
+        <br>
+        <br>
+        <button onclick="return addNewUserCategory()" id="dialogAdd3">Save</button>
+    </div>
+
+    <div id="dialog4" title="Add category">
+        <p>Code</p>
+        <input name="dCode4" type="text" id="dCode4">
+        <br>
+        <p>Name</p>
+        <input name="dName4" type="text" id="dName4">
+        <br>
+        <br>
+        <p>Consumption Treshold:</p>
+        <p>From (value in $)</p>
+        <input name="from4" type="number" min="0" id="from4">
+        <br>
+        <p>To (value in $)</p>
+        <input name="to4" type="number" min="0" id="to4">
+        <br>
+        <p>Coefficient (in %)</p>
+        <input name="coefficientC4" type="number" min="0" id="coefficientC4">
+        <br>
+        <br>
+        <br>
+        <button onclick="return saveUserCategory()" id="dialogAdd4">Save</button>
     </div>
 </div>
 </body>

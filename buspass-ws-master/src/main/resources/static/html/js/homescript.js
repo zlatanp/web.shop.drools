@@ -46,6 +46,36 @@ $(document).ready(function(){
           });
 
       });
+
+      $( function() {
+                $("#dialog3").dialog({
+                     autoOpen: false,
+                     show: {
+                         effect: "blind",
+                         duration: 500
+                         },
+                     hide: {
+                         effect: "explode",
+                         duration: 500
+                         }
+                });
+
+            });
+
+      $( function() {
+                $("#dialog4").dialog({
+                      autoOpen: false,
+                      show: {
+                          effect: "blind",
+                          duration: 500
+                           },
+                      hide: {
+                           effect: "explode",
+                           duration: 500
+                           }
+                      });
+
+                  });
 });
 
 function logout(){
@@ -85,10 +115,12 @@ function managerOnload(){
     $('#center').html('');
     $('#center').html('<table id="centerTable"></table>');
 
-    $('#centerTable').append('<tr><td><h5>Update Buyer Categories </h5></td><td>&nbsp;<button>Update</button></td></tr>');
-    $('#centerTable').append('<tr><td><h5>Update Item Categories </h5></td><td>&nbsp;<button onclick="itemCategories()">Update</button></td></tr>');
-    $('#centerTable').append('<tr><td><h5>Update Action Events </h5></td><td>&nbsp;<button>Update</button></td></tr>');
+    $('#centerTable').append('<tr><td><h5>Update Buyer Categories </h5></td><td>&nbsp;<button onclick="buyerCategories()">See More...</button></td></tr>');
+    $('#centerTable').append('<tr><td><h5>Update Item Categories </h5></td><td>&nbsp;<button onclick="itemCategories()">See More...</button></td></tr>');
+    $('#centerTable').append('<tr><td><h5>Update Action Events </h5></td><td>&nbsp;<button>See More...</button></td></tr>');
 }
+
+//******************** itemCATEGORIES ********************
 
 function itemCategories(){
     $('#center').html('');
@@ -145,6 +177,11 @@ function addNewCategory(){
         return false;
         }
 
+        if(parseInt(maxDiscountValue) > 100){
+                toastr.error("Max discount value can not be higher than 100%!");
+                return false;
+           }
+
     $.ajax({
             type: 'POST',
             url: 'itemCategory/add',
@@ -193,7 +230,7 @@ function editCategory(code){
                     $("#dName2").val(data.name);
                     $("#dMaxDiscount2").val(data.maxDiscount);
                     $("#dSupCategory2").val(data.superCategory);
-                },
+                }
           });
 
 
@@ -286,4 +323,152 @@ function loadAllCategories(){
                 }
             }
     });
+}
+
+//******************** buyerCATEGORIES ********************
+
+function buyerCategories(){
+    $('#center').html('');
+    $('#center').append('<br>');
+    $('#center').append('<h5>Add new buyer category &nbsp; <input type="button" onclick="add2()" value="add"></h5>');
+    $('#center').append('<h4>Preview of all buyer categories: </h4>');
+    //TODO ajax call to list all categories
+    loadAllBuyerCategories();
+}
+
+function add2(){
+    $("#dialog3").dialog("open");
+}
+
+function addNewUserCategory(){
+    var p = document.getElementsByName('dCode3');
+    var codeValue = p[0].value;
+    var i = document.getElementsByName('dName3');
+    var nameValue = i[0].value;
+    var j = document.getElementsByName('from3');
+    var fromValue = j[0].value;
+    var k = document.getElementsByName('to3');
+    var toValue = k[0].value;
+    var l = document.getElementsByName('coefficientC3');
+    var coefficient = l[0].value;
+
+   if(codeValue == "" || nameValue == "" || fromValue == "" || toValue =="" || coefficient == ""){
+        toastr.error("Fields can not be empty!");
+        return false;
+   }
+
+   if(parseInt(fromValue) > parseInt(toValue)){
+        toastr.error("From value can not be higher than to value!");
+        return false;
+   }
+
+   if(parseInt(coefficient) > 100){
+           toastr.error("Coefficient can not be higher than 100%!");
+           return false;
+      }
+
+
+   $.ajax({
+        type: 'POST',
+        url: 'buyerCategory/add',
+        dataType: 'json',
+        data: {code : codeValue, name : nameValue, from : fromValue, to : toValue, coefficient : coefficient},
+        success: function(data){
+            console.log(data);
+        },
+        complete: function(data){
+            var response = data.responseText;
+            console.log(response);
+            if(response == "nill")
+                toastr.error("Bad request!");
+            if(response == "codeErr")
+                toastr.error("Category with that code already exist!");
+            if(response == "ok")
+                toastr.success("Category added!");
+            }
+        });
+
+    $("#dialog3").dialog('close');
+    loadAllBuyerCategories();
+}
+
+function loadAllBuyerCategories(){
+    $('#center').append('<table id="centerTable" border="1"><tr><th>&nbsp;&nbsp;Category code&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Category name&nbsp;&nbsp;</th><th>&nbsp;&nbsp;From value&nbsp;&nbsp;</th><th>&nbsp;&nbsp;To value&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Coefficient&nbsp;&nbsp;</th></tr></table>');
+         $.ajax({
+             type: 'GET',
+             url: 'buyerCategory/getAll',
+             dataType: 'json',
+             success: function(data){
+                 console.log(data);
+                 if(data.length > 0){
+                    for(var i =0; i<data.length; i++){
+                        $('#centerTable').append('<tr><td>' + data[i].code + '&nbsp;</td><td>' + data[i].name + '&nbsp;</td><td>' + data[i].from + '$&nbsp;</td><td>' + data[i].to + ' $&nbsp;</td><td>' + data[i].coefficient + ' %&nbsp;</td><td><input type="button" onclick="editBuyerCategory(\''+ data[i].code +'\')" value="Edit Category"></td></tr>');
+                    }
+                 }
+             },
+        });
+}
+
+function editBuyerCategory(code){
+    $("#dialog4").dialog("open");
+    $.ajax({
+        type: 'GET',
+        url: 'buyerCategory/getOne',
+        dataType: 'json',
+        data: {code : code},
+        success: function(data){
+            $("#dCode4").val(code);
+            $("#dCode4").prop('disabled', true);
+            $("#dName4").val(data.name);
+            $("#dName4").prop('disabled', true);
+            $("#from4").val(data.from);
+            $("#to4").val(data.to);
+            $("#coefficientC4").val(data.coefficient);
+            }
+    });
+}
+
+function saveUserCategory(){
+    var p = document.getElementsByName('dCode4');
+    var codeValue = p[0].value;
+    var i = document.getElementsByName('dName4');
+    var nameValue = i[0].value;
+    var j = document.getElementsByName('from4');
+    var fromValue = j[0].value;
+    var k = document.getElementsByName('to4');
+    var toValue = k[0].value;
+    var l = document.getElementsByName('coefficientC4');
+    var coefficient = l[0].value;
+
+   if(codeValue == "" || nameValue == "" || fromValue == "" || toValue =="" || coefficient == ""){
+        toastr.error("Fields can not be empty!");
+        return false;
+   }
+
+   if(parseInt(fromValue) > parseInt(toValue)){
+        toastr.error("From value can not be higher than to value!");
+        return false;
+   }
+    $.ajax({
+        type: 'POST',
+        url: 'buyerCategory/update',
+        dataType: 'json',
+        data: {code : codeValue, name : nameValue, from : fromValue, to : toValue, coefficient : coefficient},
+        success: function(data){
+            console.log(data);
+            },
+        complete: function(data){
+            var response = data.responseText;
+            console.log(response);
+            if(response == "nill")
+                toastr.error("Bad request!");
+
+            if(response == "ok")
+                toastr.success("Category updated!");
+            }
+    });
+
+        $("#dialog4").dialog('close');
+        buyerCategories();
+
 }
