@@ -1,16 +1,19 @@
 package com.sctrcd.buspassws.model;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.ArrayList;
 import java.util.Date;
 
 public class ActionEvent {
 
+	@Id
 	private String code;
 	private String name;
 	private Date from;
 	private Date to;
 	private int discount;
-	private ArrayList<ItemCategory> category = new ArrayList<ItemCategory>();
+	private ArrayList<String> category = new ArrayList<String>();
 	
 	
 	public ActionEvent() {
@@ -18,7 +21,7 @@ public class ActionEvent {
 	}
 	
 	public ActionEvent(String code, String name, Date from, Date to, int discount,
-			ArrayList<ItemCategory> category) {
+			ArrayList<String> category) {
 		super();
 		this.code = code;
 		this.name = name;
@@ -68,11 +71,11 @@ public class ActionEvent {
 		this.discount = discount;
 	}
 
-	public ArrayList<ItemCategory> getCategory() {
+	public ArrayList<String> getCategory() {
 		return category;
 	}
 
-	public void setCategory(ArrayList<ItemCategory> category) {
+	public void setCategory(ArrayList<String> category) {
 		this.category = category;
 	}
 	
