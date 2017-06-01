@@ -332,15 +332,15 @@ function loadAllCategories(){
                         }
 
                         if(r == subcat.length && !getOver){
-                            $('#categories').append('<h5><a href="#">*'+ data[i].name +'</a></h5>');
+                            $('#categories').append('<h5><a href="#" onclick="getInCategory(\''+ data[i].name +'\')">*'+ data[i].name +'</a></h5>');
                             for(var j =i; j<data.length;j++){ //Do u have subcategory
                                 if(data[j].superCategory == data[i].name){
-                                    $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">* '+ data[j].name +'</a></h5>');
+                                    $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="getInCategory(\''+ data[j].name +'\')">* '+ data[j].name +'</a></h5>');
                                     subcat.push(data[j].name);
                                     //treca podkat
                                     for(var z =j; z<data.length;z++){   //Do your subcategory have subcategory
                                          if(data[z].superCategory == data[j].name){
-                                             $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">* '+ data[z].name +'</a></h5>');
+                                             $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" onclick="getInCategory(\''+ data[z].name +'\')">* '+ data[z].name +'</a></h5>');
                                              subsubcat.push(data[z].name);
                                          }
                                     }
@@ -713,4 +713,33 @@ function getSelectValues(select) {
     }
   }
   return result;
+}
+
+//******************** GET IN CATEGORY ********************
+
+function getInCategory(categoryName){
+    $('#center').html('');
+    $('#center').append('<table id="centerTable" border="1"><tr><th>&nbsp;&nbsp;Item code&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item name&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item category&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item price&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Action&nbsp;&nbsp;</th></tr></table>');
+
+
+     $.ajax({
+            type: 'GET',
+            url: 'item/getAllByCat',
+            dataType: 'json',
+            data: {category : categoryName},
+            success: function(data){
+            console.log(data);
+                if(data.length > 0){
+                    for(var i =0; i<data.length; i++){
+                        if(data[i].statusOfRecord == "ACTIVE")
+
+                            //ajax da li je kategorija data[i].category negde na popustu
+
+                            $('#centerTable').append('<tr><td>' + data[i].code + '&nbsp;</td><td>' + data[i].name + '&nbsp;</td><td>' + data[i].category + '&nbsp;</td><td>' + data[i].price + ' $&nbsp;</td><td>' + 'akcija neka nesto' + ' %&nbsp;</td><td><input type="button" onclick="addToCard(\''+ data[i].code +'\')" value="Add To Card"></td></tr>');
+                    }
+                }else{
+                $('#center').append('No Items!');
+                }
+            }
+     });
 }

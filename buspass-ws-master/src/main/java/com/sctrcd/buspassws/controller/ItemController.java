@@ -6,7 +6,10 @@ import com.sctrcd.buspassws.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 
 /**
  * Created by zlatan on 1.6.17..
@@ -53,5 +56,11 @@ public class ItemController {
 
 
         return "ok";
+    }
+
+    @RequestMapping(value = "/getAllByCat", method = RequestMethod.GET, produces = "application/json")
+    public ArrayList<Item> getAllFromCategory(@RequestParam("category") String category){
+
+        return repository.findByCategory(category);
     }
 }
