@@ -1,13 +1,16 @@
 package com.sctrcd.buspassws.model;
 
 import com.sctrcd.buspassws.enumeration.RecordStatus;
+import org.springframework.data.annotation.Id;
 
 public class Item {
 
+	@Id
 	private String code;
-	private ItemCategory category;
+	private String name;
+	private String category;
 	private double price;
-	private int quatityInShop;
+	private int quantityInShop;
 	private String dateOfRecord;
 	private RecordStatus statusOfRecord;
 	private boolean needMore;
@@ -17,13 +20,14 @@ public class Item {
 		super();
 	}
 
-	public Item(String code, ItemCategory category, double price, int quatityInShop, String dateOfRecord,
+	public Item(String code, String name,  String category, double price, int quatityInShop, String dateOfRecord,
 			RecordStatus statusOfRecord, boolean needMore, int minQuantityOnStock) {
 		super();
 		this.code = code;
+		this.name = name;
 		this.category = category;
 		this.price = price;
-		this.quatityInShop = quatityInShop;
+		this.quantityInShop = quatityInShop;
 		this.dateOfRecord = dateOfRecord;
 		this.statusOfRecord = statusOfRecord;
 		this.needMore = needMore;
@@ -38,11 +42,11 @@ public class Item {
 		this.code = code;
 	}
 
-	public ItemCategory getCategory() {
+	public String getCategory() {
 		return category;
 	}
 
-	public void setCategory(ItemCategory category) {
+	public void setCategory(String category) {
 		this.category = category;
 	}
 
@@ -54,12 +58,12 @@ public class Item {
 		this.price = price;
 	}
 
-	public int getQuatityInShop() {
-		return quatityInShop;
+	public int getQuantityInShop() {
+		return quantityInShop;
 	}
 
-	public void setQuatityInShop(int quatityInShop) {
-		this.quatityInShop = quatityInShop;
+	public void setQuantityInShop(int quantityInShop) {
+		this.quantityInShop = quantityInShop;
 	}
 
 	public String getDateOfRecord() {
@@ -93,8 +97,8 @@ public class Item {
 	public void setMinQuantityOnStock(int minQuantityOnStock) {
 		this.minQuantityOnStock = minQuantityOnStock;
 	}
-	
-	
-	
-	
+
+	public String getName() { return name; }
+
+	public void setName(String name) { this.name = name; }
 }

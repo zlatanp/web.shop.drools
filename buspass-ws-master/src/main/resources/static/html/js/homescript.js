@@ -332,15 +332,15 @@ function loadAllCategories(){
                         }
 
                         if(r == subcat.length && !getOver){
-                            $('#categories').append('<h5>* '+ data[i].name +'</h5>');
+                            $('#categories').append('<h5><a href="#">*'+ data[i].name +'</a></h5>');
                             for(var j =i; j<data.length;j++){ //Do u have subcategory
                                 if(data[j].superCategory == data[i].name){
-                                    $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;* '+ data[j].name +'</h5>');
+                                    $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">* '+ data[j].name +'</a></h5>');
                                     subcat.push(data[j].name);
                                     //treca podkat
                                     for(var z =j; z<data.length;z++){   //Do your subcategory have subcategory
                                          if(data[z].superCategory == data[j].name){
-                                             $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* '+ data[z].name +'</h5>');
+                                             $('#categories').append('<h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#">* '+ data[z].name +'</a></h5>');
                                              subsubcat.push(data[z].name);
                                          }
                                     }
