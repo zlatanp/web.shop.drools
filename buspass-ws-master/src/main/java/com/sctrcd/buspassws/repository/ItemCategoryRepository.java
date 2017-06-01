@@ -9,4 +9,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface ItemCategoryRepository extends MongoRepository<ItemCategory, String> {
 
     public ItemCategory findByCode(String code);
+
+
+    public ItemCategory findByName(String name);
 }

@@ -1,7 +1,9 @@
 package com.sctrcd.buspassws.controller;
 
 import com.sctrcd.buspassws.model.ActionEvent;
+import com.sctrcd.buspassws.model.ItemCategory;
 import com.sctrcd.buspassws.repository.ActionEventRepository;
+import com.sctrcd.buspassws.repository.ItemCategoryRepository;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,9 @@ public class ActionEventController {
 
     @Autowired
     private ActionEventRepository repository;
+
+    @Autowired
+    private ItemCategoryRepository Categoryrepository;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")
     public String addEvent(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("from") String from, @RequestParam("to") String to, @RequestParam("coefficient") int coefficient, @RequestParam("category") String category) {
@@ -94,6 +99,39 @@ public class ActionEventController {
         repository.save(e);
 
         return "ok";
+    }
+
+    @RequestMapping(value = "/isOnAction", method = RequestMethod.GET, produces = "application/json")
+    public String isCategoryOnAction(@RequestParam("category") String category){
+
+        String discount = "";
+
+        //For specific category
+        List<ActionEvent> e = repository.findAll();
+
+        for(ActionEvent ac : e){
+            ArrayList<String> categories = ac.getCategory();
+            for(int i=0;i<categories.size(); i++){
+                if(categories.get(i).equals(category))
+                    discount += ac.getName() + ": " + ac.getDiscount() + "% ";
+            }
+        }
+
+        //But supercategory?
+        ItemCategory c = Categoryrepository.findByName(category);
+        String parent = c.getSuperCategory();
+
+        if(parent != null){
+            for(ActionEvent ac : e){
+                ArrayList<String> categories = ac.getCategory();
+                for(int i=0;i<categories.size(); i++){
+                    if(categories.get(i).equals(parent))
+                        discount +=", " + ac.getName() + ": " + ac.getDiscount() + "% ";
+                }
+            }
+        }
+
+        return discount;
     }
 
 }

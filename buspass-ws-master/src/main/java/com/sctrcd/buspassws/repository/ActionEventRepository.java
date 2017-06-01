@@ -9,4 +9,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface ActionEventRepository extends MongoRepository<ActionEvent, String> {
 
     public ActionEvent findByCode(String code);
+
 }
