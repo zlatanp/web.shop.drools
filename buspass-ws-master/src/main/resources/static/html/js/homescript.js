@@ -8,6 +8,7 @@ var pom = second.split("#");
 type = pom[0];
 username = pom[1];
 
+var tempCard = new Array();
 
 $(document).ready(function(){
    $('#usernamePlaceholder').html('<span class="glyphicon glyphicon-user"></span> ' + username);
@@ -94,6 +95,21 @@ $( function() {
 
    $( function() {
           $("#dialog6").dialog({
+               autoOpen: false,
+               show: {
+                   effect: "blind",
+                   duration: 500
+                   },
+               hide: {
+                   effect: "explode",
+                   duration: 500
+                   }
+          });
+
+      });
+
+   $( function() {
+          $("#dialog7").dialog({
                autoOpen: false,
                show: {
                    effect: "blind",
@@ -731,32 +747,15 @@ function getInCategory(categoryName){
             console.log(data);
                 if(data.length > 0){
                     for(var i =0; i<data.length; i++){
-                        if(data[i].statusOfRecord == "ACTIVE")
-                        var item = data[i];
-                             $.ajax({
-                                        type: 'GET',
-                                        url: 'actionEvent/isOnAction',
-                                        dataType: 'json',
-                                        data: {category : categoryName},
-                                        success: function(data){
-                                            console.log(data)
-                                        },
-                                        complete: function(data){
-                                             if(data.responseText ==""){
-                                                $('#centerTable').append('<tr><td>' + item.code + '&nbsp;</td><td>' + item.name + '&nbsp;</td><td>' + item.category + '&nbsp;</td><td>' + item.price + ' $&nbsp;</td><td> No Action &nbsp;</td><td><input type="button" onclick="addToCard(\''+ item.code +'\')" value="Add To Card"></td></tr>');
-                                             }else{
-                                               $('#centerTable').append('<tr><td>' + item.code + '&nbsp;</td><td>' + item.name + '&nbsp;</td><td>' + item.category + '&nbsp;</td><td>' + item.price + ' $&nbsp;</td><td>' + data.responseText + '&nbsp;</td><td><input type="button" onclick="addToCard(\''+ item.code +'\')" value="Add To Card"></td></tr>');
-                                             }
-                                        }
-                             });
-                            //ajax da li je kategorija data[i].category negde na popustu
-
-                    }
-                }else{
-                $('#center').append('No Items!');
+                        if(data[i].statusOfRecord == "ACTIVE"){
+                            var item = data[i];
+                            $('#centerTable').append('<tr><td>' + item.code + '&nbsp;</td><td>' + item.name + '&nbsp;</td><td>' + item.category + '&nbsp;</td><td>' + item.price + ' $&nbsp;</td><td><input type="button" onclick="checkActions(\''+ item.category +'\')" value="Check Actions"></td><td><input type="button" onclick="addToCard(\''+ item.code +'\')" value="Add To Card"></td></tr>');
+                        }
+                     }
                 }
             }
      });
+
 }
 
 //TODO Add to card onclick
@@ -851,4 +850,22 @@ function checkActions(category){
             }
         }
     });
+}
+
+
+function addToCard(code){
+    $("#idtempitem").val(code);
+    $("#dialog7").dialog("open");
+}
+
+function addToCardFinal(){
+    var code = $("#idtempitem").val();
+    alert("stakupujem " + code);
+
+    $("#dialog7").dialog("close");
+    toastr.success("Item added to card!");
+}
+
+function card(){
+    alert("gotocard");
 }

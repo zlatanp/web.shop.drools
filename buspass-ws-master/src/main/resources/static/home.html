@@ -58,6 +58,7 @@
                 <li><a href="#">Actions</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
+                <li><a href="#" onclick="card()"><span class="glyphicon glyphicon-shopping-cart"></span> Card</a></li>
                 <li><a id="usernamePlaceholder" href="#" onclick="profile()"><span class="glyphicon glyphicon-user"></span></a></li>
                 <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
@@ -275,6 +276,14 @@
         <br>
         <br>
         <button onclick="return saveChangesEvent()" id="dialogAdd6">Save</button>
+    </div>
+
+    <div id="dialog7" title="How Much">
+        <p hidden id="idtempitem"></p>
+        <input name="count" type="number" min="1" value="1" id="count">
+        <br>
+        <br>
+        <button onclick="return addToCardFinal()" id="addToCardFinal">Save</button>
     </div>
 </div>
 </body>
