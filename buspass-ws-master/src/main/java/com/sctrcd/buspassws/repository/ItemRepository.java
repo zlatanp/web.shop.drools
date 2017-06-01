@@ -11,6 +11,6 @@ import java.util.ArrayList;
 public interface ItemRepository extends MongoRepository<Item, String> {
 
     public Item findByCode(String code);
-
+    public ArrayList<Item> findByName(String name);
     public ArrayList<Item> findByCategory(String category);
 }

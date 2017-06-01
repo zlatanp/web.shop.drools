@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by zlatan on 1.6.17..
@@ -62,5 +63,173 @@ public class ItemController {
     public ArrayList<Item> getAllFromCategory(@RequestParam("category") String category){
 
         return repository.findByCategory(category);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json")
+    public ArrayList<Item> search(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("category") String category, @RequestParam("from") int from, @RequestParam("to") int to){
+
+        System.out.println(code + name + category + from + to);
+
+        Item i = new Item();
+        ArrayList<Item> items = new ArrayList<Item>();
+
+        if(code == "null" && name == "null" && category =="null" && from == 0 && to == 0)
+            return null;
+
+        if(!code.equals("null")){
+            i = repository.findByCode(code);
+
+            if(!name.equals("null")){
+                if (!i.getName().toLowerCase().equals(name.toLowerCase()))
+                    return null;
+            }
+
+            if(!category.equals("null")) {
+                if (!i.getCategory().toLowerCase().equals(category.toLowerCase()))
+                    return null;
+            }
+
+            if(from != 0){
+                if(i.getPrice() < from)
+                    return null;
+            }
+
+            if(to != 0){
+                if(i.getPrice() > to)
+                    return null;
+            }
+
+            if(i.getStatusOfRecord().equals(RecordStatus.ACTIVE))
+                items.add(i);
+
+            return items;
+        }
+
+        if(!name.equals("null")){
+
+            items = repository.findByName(name);
+            ArrayList<Item> help = new ArrayList<Item>(items);
+            if(!category.equals("null")) {
+                items.clear();
+                for(int j =0; j< help.size(); j++){
+                    if(help.get(j).getCategory().toLowerCase().equals(category.toLowerCase()))
+                        items.add(help.get(j));
+                }
+            }
+
+            if(from != 0){
+                ArrayList<Item> help2 = new ArrayList<Item>(items);
+                items.clear();
+                for(int j =0; j< help2.size(); j++){
+                    if(help2.get(j).getPrice() >= from)
+                    items.add(help.get(j));
+                }
+            }
+
+
+            if(to != 0){
+                ArrayList<Item> help3 = new ArrayList<Item>(items);
+                items.clear();
+                for(int j =0; j< help3.size(); j++){
+                    if(help3.get(j).getPrice() <= to)
+                        items.add(help.get(j));
+                }
+            }
+
+            ArrayList<Item> help4 = new ArrayList<Item>(items);
+            items.clear();
+            for(int j =0; j< help4.size(); j++){
+                if(help4.get(j).getStatusOfRecord().equals(RecordStatus.ACTIVE))
+                    items.add(help.get(j));
+            }
+
+            return items;
+        }
+
+        if(!category.equals("null")){
+
+            items = repository.findByCategory(category);
+            System.out.println(items.size());
+
+
+            if(from != 0){
+                ArrayList<Item> help2 = new ArrayList<Item>(items);
+                items.clear();
+                for(int j =0; j< help2.size(); j++){
+                    if(help2.get(j).getPrice() >= from)
+                        items.add(help2.get(j));
+                }
+            }
+
+
+            if(to != 0){
+                ArrayList<Item> help3 = new ArrayList<Item>(items);
+                items.clear();
+                for(int j =0; j< help3.size(); j++){
+                    if(help3.get(j).getPrice() <= to)
+                        items.add(help3.get(j));
+                }
+            }
+
+            ArrayList<Item> help4 = new ArrayList<Item>(items);
+            items.clear();
+            for(int j =0; j< help4.size(); j++){
+                if(help4.get(j).getStatusOfRecord().equals(RecordStatus.ACTIVE))
+                    items.add(help4.get(j));
+            }
+
+            return items;
+        }
+
+        if(from != 0){
+
+           List<Item> temp = repository.findAll();
+           ArrayList<Item> tempList = new ArrayList<Item>(temp);
+
+            for (Item tempItem : tempList) {
+                if(tempItem.getPrice() >= from)
+                    items.add(tempItem);
+            }
+
+            if(to != 0){
+                ArrayList<Item> help3 = new ArrayList<Item>(items);
+                items.clear();
+                for(int j =0; j< help3.size(); j++){
+                    if(help3.get(j).getPrice() <= to)
+                        items.add(help3.get(j));
+                }
+            }
+
+            ArrayList<Item> help4 = new ArrayList<Item>(items);
+            items.clear();
+            for(int j =0; j< help4.size(); j++){
+                if(help4.get(j).getStatusOfRecord().equals(RecordStatus.ACTIVE))
+                    items.add(help4.get(j));
+            }
+
+            return items;
+        }
+
+        if(to != 0) {
+
+            List<Item> temp = repository.findAll();
+            ArrayList<Item> tempList = new ArrayList<Item>(temp);
+
+            for (Item tempItem : tempList) {
+                if (tempItem.getPrice() <= to)
+                    items.add(tempItem);
+            }
+
+            ArrayList<Item> help4 = new ArrayList<Item>(items);
+            items.clear();
+            for (int j = 0; j < help4.size(); j++) {
+                if (help4.get(j).getStatusOfRecord().equals(RecordStatus.ACTIVE))
+                    items.add(help4.get(j));
+            }
+
+            return items;
+        }
+
+        return null;
     }
 }

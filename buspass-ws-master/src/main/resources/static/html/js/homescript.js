@@ -765,12 +765,90 @@ function getInCategory(categoryName){
 
 function searchItems(){
     $('#center').html('');
-    $('#center').append('<table id="centerTable" ><tr><td>Find by code:</td><td><input type="text" name="code"></td></tr><tr><td>Find by name:</td><td><input type="text" name="name"></td></tr><tr><td>Find by category:</td><td><input type="text" name="category"></td></tr><tr><td>Find by price:</td></tr><tr><td>Price from: </td><td><input type="number" min="0" name="pricefrom"></td></tr><tr><td>Price to: </td><td><input type="number" min="0" name="priceto"></td></tr><tr></tr><tr><td><button onclick="searchItm()">Search</button></td></tr></table>');
+    $('#center').append('<table id="centerTable" ><tr><td>Find by code:</td><td><input type="text" name="code"></td></tr><tr><td>Find by name:</td><td><input type="text" name="name"></td></tr><tr><td>Find by category:</td><td><input type="text" name="category"></td></tr><tr><td>Find by price:</td></tr><tr><td>Price from: </td><td><input type="number" min="0" name="pricefrom"></td></tr><tr><td>Price to: </td><td><input type="number" min="0" name="priceto"></td></tr><tr></tr><tr><td><button onclick="return searchItm()">Search</button></td></tr></table>');
 
 
     return false;
 }
 
 function searchItm(){
-    alert("dtv");
+    var p = document.getElementsByName('code');
+    var codeValue = p[0].value;
+    var i = document.getElementsByName('name');
+    var nameValue = i[0].value;
+    var j = document.getElementsByName('category');
+    var categoryValue = j[0].value;
+    var k = document.getElementsByName('pricefrom');
+    var fromValue = k[0].value;
+    var l = document.getElementsByName('priceto');
+    var toValue = l[0].value;
+
+
+    if(codeValue == "" && nameValue == "" && categoryValue == "" && fromValue =="" && toValue == ""){
+        toastr.error("All fields can not be empty!");
+        return false;
+    }
+
+    if(parseInt(fromValue) > parseInt(toValue)){
+         toastr.error("From value can not be higher than to value!");
+         return false;
+    }
+
+    if(codeValue == "")
+        codeValue = "null";
+    if(nameValue == "")
+        nameValue = "null";
+    if(categoryValue == "")
+        categoryValue = "null";
+    if(fromValue == "")
+         fromValue = 0;
+    if(toValue == "")
+         toValue = 0;
+
+    var index;
+    var list = new Array();
+
+    $.ajax({
+        type: 'POST',
+        url: 'item/search',
+        dataType: 'json',
+        data: {code : codeValue, name : nameValue, category : categoryValue, from : fromValue, to : toValue},
+        success: function(data){
+                    console.log(data);
+                    if(data.length > 0){
+                        $('#center').html('');
+                        $('#center').append('<table id="centerTable" border="1"><tr><th>&nbsp;&nbsp;Item code&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item name&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item category&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item price&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Action&nbsp;&nbsp;</th></tr></table>');
+
+                        index = 0;
+                        while(index < data.length){
+                            var item = data[index];
+                            var categoryValue = item.category;
+                            $('#centerTable').append('<tr><td>' + item.code + '&nbsp;</td><td>' + item.name + '&nbsp;</td><td id="'+ index +'">' + item.category + '&nbsp;</td><td>' + item.price + ' $&nbsp;</td><td><input type="button" onclick="checkActions(\''+ item.category +'\')" value="Check Actions"></td><td><input type="button" onclick="addToCard(\''+ item.code +'\')" value="Add To Card"></td></tr>');
+                            list.push(item.category);
+                            index ++;
+                        }
+                    }
+        }
+    });
+
+    return false;
+}
+
+function checkActions(category){
+    $.ajax({
+        type: 'GET',
+        url: 'actionEvent/isOnAction',
+        dataType: 'json',
+        data: {category : category},
+        success: function(data){
+            console.log(data)
+        },
+        complete: function(data){
+            if(data.responseText ==""){
+                alert("No Actions!");
+            }else{
+               alert(data.responseText);
+            }
+        }
+    });
 }
