@@ -742,7 +742,6 @@ function getInCategory(categoryName){
                                             console.log(data)
                                         },
                                         complete: function(data){
-                                             console.log(data)
                                              if(data.responseText ==""){
                                                 $('#centerTable').append('<tr><td>' + item.code + '&nbsp;</td><td>' + item.name + '&nbsp;</td><td>' + item.category + '&nbsp;</td><td>' + item.price + ' $&nbsp;</td><td> No Action &nbsp;</td><td><input type="button" onclick="addToCard(\''+ item.code +'\')" value="Add To Card"></td></tr>');
                                              }else{
@@ -758,4 +757,20 @@ function getInCategory(categoryName){
                 }
             }
      });
+}
+
+//TODO Add to card onclick
+
+//******************** SEARCH FOR ITEMS ********************
+
+function searchItems(){
+    $('#center').html('');
+    $('#center').append('<table id="centerTable" ><tr><td>Find by code:</td><td><input type="text" name="code"></td></tr><tr><td>Find by name:</td><td><input type="text" name="name"></td></tr><tr><td>Find by category:</td><td><input type="text" name="category"></td></tr><tr><td>Find by price:</td></tr><tr><td>Price from: </td><td><input type="number" min="0" name="pricefrom"></td></tr><tr><td>Price to: </td><td><input type="number" min="0" name="priceto"></td></tr><tr></tr><tr><td><button onclick="searchItm()">Search</button></td></tr></table>');
+
+
+    return false;
+}
+
+function searchItm(){
+    alert("dtv");
 }
