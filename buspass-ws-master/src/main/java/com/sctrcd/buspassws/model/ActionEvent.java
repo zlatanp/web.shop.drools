@@ -10,8 +10,8 @@ public class ActionEvent {
 	@Id
 	private String code;
 	private String name;
-	private Date from;
-	private Date to;
+	private String from;
+	private String to;
 	private int discount;
 	private ArrayList<String> category = new ArrayList<String>();
 	
@@ -20,7 +20,7 @@ public class ActionEvent {
 		super();
 	}
 	
-	public ActionEvent(String code, String name, Date from, Date to, int discount,
+	public ActionEvent(String code, String name, String from, String to, int discount,
 			ArrayList<String> category) {
 		super();
 		this.code = code;
@@ -47,19 +47,19 @@ public class ActionEvent {
 		this.name = name;
 	}
 
-	public Date getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
-	public void setFrom(Date from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public Date getTo() {
+	public String getTo() {
 		return to;
 	}
 
-	public void setTo(Date to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 

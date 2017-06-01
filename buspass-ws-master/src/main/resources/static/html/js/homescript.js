@@ -596,7 +596,7 @@ function loadEvents(){
                      console.log(data);
                      if(data.length > 0){
                         for(var i =0; i<data.length; i++){
-                            $('#centerTable').append('<tr><td>' + data[i].code + '&nbsp;</td><td>' + data[i].name + '&nbsp;</td><td>' + String(new Date(data[i].from).subtractdHours(2)).substring(0,15) + '&nbsp;</td><td>' + String(new Date(data[i].to).subtractdHours(2)).substring(0,15) + ' &nbsp;</td><td>' + data[i].discount + ' %&nbsp;</td><td>' + data[i].category + ' &nbsp;</td><td><input type="button" onclick="editEvent(\''+ data[i].code +'\')" value="Edit Category"></td></tr>');
+                            $('#centerTable').append('<tr><td>' + data[i].code + '&nbsp;</td><td>' + data[i].name + '&nbsp;</td><td>' + data[i].from + '&nbsp;</td><td>' + data[i].to + ' &nbsp;</td><td>' + data[i].discount + ' %&nbsp;</td><td>' + data[i].category + ' &nbsp;</td><td><input type="button" onclick="editEvent(\''+ data[i].code +'\')" value="Edit Category"></td></tr>');
                         }
                      }
                  },
@@ -625,8 +625,11 @@ $("#dialog6").dialog("open");
                                 $("#dCode6").prop('disabled', true);
                                 $("#dName6").val(data.name);
                                 //Dates and categories selectedc
-                                $("#from6").val('2017-05-01');
-                                $("#to6").val('2017-05-31');
+                                console.log(data.from);
+
+                                console.log(data.to);
+                                $("#from6").val(data.from);
+                                $("#to6").val(data.to);
                                 $("#coefficientC6").val(data.discount);
                                 var categories = data.category+ '';
                                 var dataarray=categories.split(',');

@@ -40,27 +40,6 @@ public class ActionEventController {
 
         }
 
-        String[] fromdate = from.split("-");
-        System.out.println(fromdate[0]);
-        System.out.println(fromdate[1]);
-        System.out.println(fromdate[2]);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(fromdate[0]));
-        cal.set(Calendar.MONTH, Integer.parseInt(fromdate[1]) - 1);
-        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(fromdate[2]));
-        Date fromDateRepresent = cal.getTime();
-
-
-        String[] todate = to.split("-");
-
-        Calendar calD = Calendar.getInstance();
-        calD.set(Calendar.YEAR, Integer.parseInt(todate[0]));
-        calD.set(Calendar.MONTH, Integer.parseInt(todate[1]) - 1);
-        calD.set(Calendar.DAY_OF_MONTH, Integer.parseInt(todate[2]));
-        Date toDateRepresent = calD.getTime();
-
-
         JSONArray arr = new JSONArray(category);
         ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < arr.length(); i++) {
@@ -70,8 +49,8 @@ public class ActionEventController {
         ActionEvent e = new ActionEvent();
         e.setCode(code);
         e.setName(name);
-        e.setFrom(fromDateRepresent);
-        e.setTo(toDateRepresent);
+        e.setFrom(from);
+        e.setTo(to);
         e.setDiscount(coefficient);
         e.setCategory(list);
 
@@ -97,25 +76,6 @@ public class ActionEventController {
         if (code.isEmpty() || name.isEmpty() || from.isEmpty() || to.isEmpty() || category.isEmpty())
             return "nill";
 
-        String[] fromdate = from.split("-");
-        System.out.println(fromdate[0]);
-        System.out.println(fromdate[1]);
-        System.out.println(fromdate[2]);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.YEAR, Integer.parseInt(fromdate[0]));
-        cal.set(Calendar.MONTH, Integer.parseInt(fromdate[1]) - 1);
-        cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(fromdate[2]));
-        Date fromDateRepresent = cal.getTime();
-
-
-        String[] todate = to.split("-");
-
-        Calendar calD = Calendar.getInstance();
-        calD.set(Calendar.YEAR, Integer.parseInt(todate[0]));
-        calD.set(Calendar.MONTH, Integer.parseInt(todate[1]) - 1);
-        calD.set(Calendar.DAY_OF_MONTH, Integer.parseInt(todate[2]));
-        Date toDateRepresent = calD.getTime();
 
 
         JSONArray arr = new JSONArray(category);
@@ -126,8 +86,8 @@ public class ActionEventController {
 
         ActionEvent e = repository.findByCode(code);
         e.setName(name);
-        e.setFrom(fromDateRepresent);
-        e.setTo(toDateRepresent);
+        e.setFrom(from);
+        e.setTo(to);
         e.setDiscount(coefficient);
         e.setCategory(list);
 
