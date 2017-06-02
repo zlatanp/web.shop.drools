@@ -1,8 +1,11 @@
 package com.sctrcd.buspassws.model;
 
+import org.kie.api.definition.type.PropertyReactive;
+
 /**
  * Created by zlatan on 2.6.17..
  */
+@PropertyReactive
 public class ItemCount {
 
     private Item i;
