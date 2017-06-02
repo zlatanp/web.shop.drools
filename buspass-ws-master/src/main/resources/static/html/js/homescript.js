@@ -872,8 +872,6 @@ function addToCardFinal(){
     var code = $("#idtempitem").val();
     var quantity = $("#count").val();
 
-    alert("stakupujem " + code + quantity);
-
     tempCard.push(code);
     tempCard.push(quantity);
 
@@ -906,11 +904,8 @@ function card(){
          });
 
     }
-    $('#center').append('<br><h5>Price without actions: <p id="priceWithoutActions">0</p></h5>');
-    $('#center').append('<h5>Price with actions: <p id="priceWithActions">0</p></h5>');
-    $('#center').append('<h5>Pay with reward points (you have: )<p id="points">0</p> points) <p id="enterPoints">0</p></h5>');
-    $('#center').append('<h5>Finish price: <p id="finishPrice">0</p></h5>');
-    $('#center').append('<br><button>Order!</button>');
+
+    $('#center').append('<br><button onclick="return statusCard()">See Status!</button>');
 
 }
 
@@ -923,4 +918,28 @@ function deleteFromCard(code){
         }
     }
     card();
+}
+
+function statusCard(){
+
+    var json = JSON.stringify(tempCard);
+
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/count',
+        dataType: 'json',
+        data: {json : json, user : username},
+        success: function(data){
+             console.log(data);
+           }
+    });
+
+
+    $('#center').append('<br><h5>Price without actions: <p id="priceWithoutActions">0</p></h5>');
+    $('#center').append('<h5>Price with actions: <p id="priceWithActions">0</p></h5>');
+    $('#center').append('<h5>Pay with reward points (you have: )<p id="points">0</p> points) <p id="enterPoints">0</p></h5>');
+    $('#center').append('<h5>Finish price: <p id="finishPrice">0</p></h5>');
+    $('#center').append('<br><button>Order!</button>');
+
+    return false;
 }
