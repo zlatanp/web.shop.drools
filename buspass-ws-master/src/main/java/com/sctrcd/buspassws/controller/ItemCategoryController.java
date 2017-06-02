@@ -22,9 +22,9 @@ public class ItemCategoryController {
     private ItemCategoryRepository repository;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")
-    public String addCategory(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("maxdiscount") int maxdiscount, @RequestParam("supercategory") String supercategory){
+    public String addCategory(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("maxdiscount") int maxdiscount, @RequestParam("supercategory") String supercategory, @RequestParam("wholesale") String wholesale){
 
-        System.out.println(code + name + maxdiscount + supercategory);
+        System.out.println(code + name + maxdiscount + supercategory + wholesale);
         if(code.isEmpty() || name.isEmpty() || supercategory.isEmpty())
             return "nill";
 
@@ -36,8 +36,14 @@ public class ItemCategoryController {
 
         }
 
-        ItemCategory c = new ItemCategory(code, name, supercategory, maxdiscount);
-        repository.save(c);
+        if(wholesale.equals("false")) {
+            ItemCategory c = new ItemCategory(code, name, supercategory, maxdiscount, false);
+            repository.save(c);
+        }else{
+            ItemCategory c = new ItemCategory(code, name, supercategory, maxdiscount, true);
+            repository.save(c);
+        }
+
 
         return "ok";
     }
@@ -62,7 +68,7 @@ public class ItemCategoryController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST, produces = "application/json")
-    public String updateCategory(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("maxdiscount") int maxdiscount, @RequestParam("supercategory") String supercategory){
+    public String updateCategory(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("maxdiscount") int maxdiscount, @RequestParam("supercategory") String supercategory,  @RequestParam("wholesale") String wholesale){
         if(code.isEmpty() || name.isEmpty() || supercategory.isEmpty())
             return "nill";
 
@@ -73,6 +79,11 @@ public class ItemCategoryController {
         c.setName(name);
         c.setMaxDiscount(maxdiscount);
         c.setSuperCategory(supercategory);
+        if(wholesale.equals("false")) {
+            c.setWholesale(false);
+        }else{
+            c.setWholesale(true);
+        }
         repository.save(c);
 
         return "ok";

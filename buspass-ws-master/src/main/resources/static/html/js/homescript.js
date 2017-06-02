@@ -11,7 +11,11 @@ username = pom[1];
 var tempCard = new Array();
 
 $(document).ready(function(){
-   $('#usernamePlaceholder').html('<span class="glyphicon glyphicon-user"></span> ' + username);
+
+
+   if(type === "buyer")
+        $('#usernamePlaceholder').html('<span class="glyphicon glyphicon-user"></span> ' + username);
+
    if(type === "manager")
         managerOnload();
 
@@ -217,8 +221,11 @@ function addNewCategory(){
     var maxDiscountValue = k[0].value;
     var l = document.getElementsByName('dSupCategory');
     var supCategory = l[0].value;
+    var m = document.getElementsByName('wholesale');
+    var wholesale = m[0].value;
 
-    if(codeValue == "" || nameValue == "" || maxDiscountValue =="" || supCategory == ""){
+
+    if(codeValue == "" || nameValue == "" || maxDiscountValue =="" || supCategory == "" || wholesale == ""){
         toastr.error("Fields can not be empty!");
         return false;
         }
@@ -232,7 +239,7 @@ function addNewCategory(){
             type: 'POST',
             url: 'itemCategory/add',
             dataType: 'json',
-            data: {code : codeValue, name : nameValue, maxdiscount : maxDiscountValue, supercategory : supCategory},
+            data: {code : codeValue, name : nameValue, maxdiscount : maxDiscountValue, supercategory : supCategory, wholesale : wholesale},
             success: function(data){
                 console.log(data);
             },
@@ -276,6 +283,7 @@ function editCategory(code){
                     $("#dName2").val(data.name);
                     $("#dMaxDiscount2").val(data.maxDiscount);
                     $("#dSupCategory2").val(data.superCategory);
+                    $("#wholesale2").val(data.wholesale.toString());
                 }
           });
 
@@ -293,8 +301,10 @@ function updateCategory(){
     var maxDiscountValue = k[0].value;
     var l = document.getElementsByName('dSupCategory2');
     var supCategory = l[0].value;
+    var m = document.getElementsByName('wholesale2');
+    var wholesale = m[0].value;
 
-    if(codeValue == "" || nameValue == "" || maxDiscountValue =="" || supCategory == ""){
+    if(codeValue == "" || nameValue == "" || maxDiscountValue =="" || supCategory == "" || wholesale == ""){
         toastr.error("Fields can not be empty!");
         return false;
     }
@@ -303,7 +313,7 @@ function updateCategory(){
                 type: 'POST',
                 url: 'itemCategory/update',
                 dataType: 'json',
-                data: {code : codeValue, name : nameValue, maxdiscount : maxDiscountValue, supercategory : supCategory},
+                data: {code : codeValue, name : nameValue, maxdiscount : maxDiscountValue, supercategory : supCategory, wholesale : wholesale},
                 success: function(data){
                     console.log(data);
                 },
@@ -896,11 +906,21 @@ function card(){
          });
 
     }
+    $('#center').append('<br><h5>Price without actions: <p id="priceWithoutActions">0</p></h5>');
+    $('#center').append('<h5>Price with actions: <p id="priceWithActions">0</p></h5>');
+    $('#center').append('<h5>Pay with reward points (you have: )<p id="points">0</p> points) <p id="enterPoints">0</p></h5>');
+    $('#center').append('<h5>Finish price: <p id="finishPrice">0</p></h5>');
+    $('#center').append('<br><button>Order!</button>');
 
 }
 
 }
 
 function deleteFromCard(code){
-
+    for(var i=0; i<tempCard.length; i+=2){
+        if(tempCard[i] == code){
+            tempCard.splice(i,2);
+        }
+    }
+    card();
 }

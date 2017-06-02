@@ -11,18 +11,20 @@ public class ItemCategory {
 	private String name;
 	private String supercategory;
 	private int maxDiscount;
+	private boolean wholesale;
 	
 	
 	public ItemCategory() {
 		super();
 	}
 	
-	public ItemCategory(String code, String name, String supercategory, int maxDiscount) {
+	public ItemCategory(String code, String name, String supercategory, int maxDiscount, boolean wholesale) {
 		super();
 		this.code = code;
 		this.name = name;
 		this.supercategory = supercategory;
 		this.maxDiscount = maxDiscount;
+		this.wholesale = wholesale;
 	}
 
 	public String getCode() {
@@ -52,4 +54,12 @@ public class ItemCategory {
 	public String getName() { return name; }
 
 	public void setName(String name) { this.name = name; }
+
+	public boolean isWholesale() {
+		return wholesale;
+	}
+
+	public void setWholesale(boolean wholesale) {
+		this.wholesale = wholesale;
+	}
 }
