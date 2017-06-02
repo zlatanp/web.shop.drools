@@ -2,8 +2,8 @@
 <kmodule xmlns="http://jboss.org/kie/6.0.0/kmodule"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <kbase name="BusPassKbase" packages="com.sctrcd.buspassws.rules">
-    	<ksession name="BusPassSession" />
+    <kbase name="BusPass" packages="com.sctrcd.buspassws.rules">
+    	<ksession name="ItemCountUserSession" />
     </kbase>
 
 </kmodule>

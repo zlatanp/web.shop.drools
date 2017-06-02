@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sctrcd.buspassws.model.BusPass;
 import com.sctrcd.buspassws.model.Person;
-import com.sctrcd.buspassws.service.BusPassService;
+import com.sctrcd.buspassws.service.DroolsService;
 
 @RestController
 public class BusPassController {
 
     private static Logger log = LoggerFactory.getLogger(BusPassController.class);
 
-    private final BusPassService busPassService;
+    private final DroolsService droolsService;
 
     @Autowired
-    public BusPassController(BusPassService busPassService) {
-        this.busPassService = busPassService;
+    public BusPassController(DroolsService droolsService) {
+        this.droolsService = droolsService;
     }
 
     @RequestMapping(value = "/buspass", 
@@ -34,9 +34,11 @@ public class BusPassController {
 
         log.debug("Bus pass request received for: " + person);
         
-        BusPass busPass = busPassService.getBusPass(person);
+        //BusPass busPass = droolsService.getBusPass(person);
 
-        return busPass;
+        //return busPass;
+
+        return null;
     }
 
 }

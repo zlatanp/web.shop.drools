@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.sctrcd.buspassws.model.ItemCountUser;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.ObjectFilter;
@@ -17,14 +18,14 @@ import com.sctrcd.buspassws.model.BusPass;
 import com.sctrcd.buspassws.model.Person;
 
 @Service
-public class BusPassService {
+public class DroolsService {
 
-    private static Logger log = LoggerFactory.getLogger(BusPassService.class);
+    private static Logger log = LoggerFactory.getLogger(DroolsService.class);
 
     private final KieContainer kieContainer;
 
     @Autowired
-    public BusPassService(KieContainer kieContainer) {
+    public DroolsService(KieContainer kieContainer) {
         log.info("Initialising a new bus pass session.");
         this.kieContainer = kieContainer;
     }
@@ -33,34 +34,35 @@ public class BusPassService {
      * Create a new session, insert a person's details and fire rules to
      * determine what kind of bus pass is to be issued.
      */
-    public BusPass getBusPass(Person person) {
-        KieSession kieSession = kieContainer.newKieSession("BusPassSession");
-        kieSession.insert(person);
+    public ItemCountUser getItemCountUser(ItemCountUser card) {
+        KieSession kieSession = kieContainer.newKieSession("ItemCountUserSession");
+        kieSession.insert(card);
         kieSession.fireAllRules();
-        BusPass busPass = findBusPass(kieSession);
+
+        ItemCountUser doneCard = findItemCountUser(kieSession);
         kieSession.dispose();
-        return busPass;
+        return doneCard;
     }
     
     /**
      * Search the {@link KieSession} for bus passes.
      */
-    private BusPass findBusPass(KieSession kieSession) {
+    private ItemCountUser findItemCountUser(KieSession kieSession) {
         
         // Find all BusPass facts and 1st generation child classes of BusPass.
         ObjectFilter busPassFilter = new ObjectFilter() {
             public boolean accept(Object object) {
-                if (BusPass.class.equals(object.getClass())) return true;
-                if (BusPass.class.equals(object.getClass().getSuperclass())) return true;
+                if (ItemCountUser.class.equals(object.getClass())) return true;
+                if (ItemCountUser.class.equals(object.getClass().getSuperclass())) return true;
                 return false;
             }
         };
 
         // printFactsMessage(kieSession);
         
-        List<BusPass> facts = new ArrayList<BusPass>();
+        List<ItemCountUser> facts = new ArrayList<ItemCountUser>();
         for (FactHandle handle : kieSession.getFactHandles(busPassFilter)) {
-            facts.add((BusPass) kieSession.getObject(handle));
+            facts.add((ItemCountUser) kieSession.getObject(handle));
         }
         if (facts.size() == 0) {
             return null;
