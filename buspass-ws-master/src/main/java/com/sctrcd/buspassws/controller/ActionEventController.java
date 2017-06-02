@@ -105,6 +105,7 @@ public class ActionEventController {
     public String isCategoryOnAction(@RequestParam("category") String category){
 
         String discount = "";
+        String newline = System.getProperty("line.separator");
 
         //For specific category
         List<ActionEvent> e = repository.findAll();
@@ -113,7 +114,7 @@ public class ActionEventController {
             ArrayList<String> categories = ac.getCategory();
             for(int i=0;i<categories.size(); i++){
                 if(categories.get(i).equals(category))
-                    discount += ac.getName() + ": " + ac.getDiscount() + "% ";
+                    discount += ac.getName() + ": " + ac.getDiscount() + "% , Date: " + ac.getFrom() + " - " + ac.getTo() + newline;
             }
         }
 
@@ -126,7 +127,7 @@ public class ActionEventController {
                 ArrayList<String> categories = ac.getCategory();
                 for(int i=0;i<categories.size(); i++){
                     if(categories.get(i).equals(parent))
-                        discount +=", " + ac.getName() + ": " + ac.getDiscount() + "% ";
+                        discount += ac.getName() + ": " + ac.getDiscount() + "% , Date: " + ac.getFrom() + " - " + ac.getTo() + newline;
                 }
             }
         }

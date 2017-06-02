@@ -860,12 +860,47 @@ function addToCard(code){
 
 function addToCardFinal(){
     var code = $("#idtempitem").val();
-    alert("stakupujem " + code);
+    var quantity = $("#count").val();
+
+    alert("stakupujem " + code + quantity);
+
+    tempCard.push(code);
+    tempCard.push(quantity);
 
     $("#dialog7").dialog("close");
     toastr.success("Item added to card!");
 }
 
 function card(){
-    alert("gotocard");
+    $('#center').html('');
+
+    if(tempCard.length < 1){
+        $('#center').append('<h3>No items in card!</h3>');
+    }else{
+    $('#center').append('<table id="centerTable" border="1"><tr><th>&nbsp;&nbsp;Item code&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item name&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item category&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Item price&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Action&nbsp;&nbsp;</th><th>&nbsp;&nbsp;Count&nbsp;&nbsp;</th></tr></table>');
+
+
+    for(var i=0; i<tempCard.length; i+=2){
+        var code = tempCard[i];
+        var count =tempCard[i+1];
+        $.ajax({
+           type: 'GET',
+           url: 'item/searchByCode',
+           dataType: 'json',
+           data: {code : code, count : count},
+           success: function(data){
+                console.log(data);
+                var obj = data.i
+                $('#centerTable').append('<tr><td>' + obj.code + '&nbsp;</td><td>' + obj.name + '&nbsp;</td><td>' + obj.category + '&nbsp;</td><td>' + obj.price + ' $&nbsp;</td><td><input type="button" onclick="checkActions(\''+ obj.category +'\')" value="Check Actions"></td><td>'+ data.count  +'</td><td><input type="button" onclick="deleteFromCard(\''+ obj.code +'\')" value="Delete item"></td></tr>');
+           }
+         });
+
+    }
+
+}
+
+}
+
+function deleteFromCard(code){
+
 }

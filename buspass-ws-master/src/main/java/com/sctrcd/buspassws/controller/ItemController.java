@@ -1,6 +1,7 @@
 package com.sctrcd.buspassws.controller;
 
 import com.sctrcd.buspassws.enumeration.RecordStatus;
+import com.sctrcd.buspassws.model.Card;
 import com.sctrcd.buspassws.model.Item;
 import com.sctrcd.buspassws.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -232,4 +233,15 @@ public class ItemController {
 
         return null;
     }
+
+    @RequestMapping(value = "/searchByCode", method = RequestMethod.GET, produces = "application/json")
+    public Card getByCode(@RequestParam("code") String code, @RequestParam("count") int count){
+
+        if(!code.isEmpty()) {
+            Item i = repository.findByCode(code);
+            return new Card(i, count);
+        }
+        return null;
+    }
+
 }
