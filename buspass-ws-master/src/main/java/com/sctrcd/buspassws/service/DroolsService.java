@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.sctrcd.buspassws.model.ItemCount;
 import com.sctrcd.buspassws.model.ItemCountUser;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -34,35 +35,35 @@ public class DroolsService {
      * Create a new session, insert a person's details and fire rules to
      * determine what kind of bus pass is to be issued.
      */
-    public ItemCountUser getItemCountUser(ItemCountUser card) {
+    public ItemCount getItemCount(ItemCount card) {
         KieSession kieSession = kieContainer.newKieSession("ItemCountUserSession");
         kieSession.insert(card);
         kieSession.fireAllRules();
 
-        ItemCountUser doneCard = findItemCountUser(kieSession);
+        ItemCount doneItem = findItemCount(kieSession);
         kieSession.dispose();
-        return doneCard;
+        return doneItem;
     }
     
     /**
      * Search the {@link KieSession} for bus passes.
      */
-    private ItemCountUser findItemCountUser(KieSession kieSession) {
+    private ItemCount findItemCount(KieSession kieSession) {
         
         // Find all BusPass facts and 1st generation child classes of BusPass.
         ObjectFilter busPassFilter = new ObjectFilter() {
             public boolean accept(Object object) {
-                if (ItemCountUser.class.equals(object.getClass())) return true;
-                if (ItemCountUser.class.equals(object.getClass().getSuperclass())) return true;
+                if (ItemCount.class.equals(object.getClass())) return true;
+                if (ItemCount.class.equals(object.getClass().getSuperclass())) return true;
                 return false;
             }
         };
 
         // printFactsMessage(kieSession);
         
-        List<ItemCountUser> facts = new ArrayList<ItemCountUser>();
+        List<ItemCount> facts = new ArrayList<ItemCount>();
         for (FactHandle handle : kieSession.getFactHandles(busPassFilter)) {
-            facts.add((ItemCountUser) kieSession.getObject(handle));
+            facts.add((ItemCount) kieSession.getObject(handle));
         }
         if (facts.size() == 0) {
             return null;

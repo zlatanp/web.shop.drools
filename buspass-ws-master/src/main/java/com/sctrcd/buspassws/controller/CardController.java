@@ -73,16 +73,21 @@ public class CardController {
 
             }
 
-            ItemCount c = new ItemCount(item, count, wholesale);
+            ItemCount c = new ItemCount(item, count, wholesale, item.getPrice() * count);
             card.getItems().add(c);
 
         }
 
-        System.out.println( " card: " + card.getItems().size());
+        System.out.println( " card: " + card.getItems().get(0).getItem().getPrice());
         //drools things
-        ItemCountUser doneCard = droolsService.getItemCountUser(card);
-        System.out.println(" donecard: " + doneCard.getItems().size());
-        return doneCard;
+        for (int i=0; i<card.getItems().size(); i++) {
+
+            ItemCount it = card.getItems().get(i);
+            droolsService.getItemCount(it);
+        }
+
+        System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice());
+        return card;
     }
 
 }

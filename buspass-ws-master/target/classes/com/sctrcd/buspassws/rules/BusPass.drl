@@ -6,9 +6,23 @@ import com.sctrcd.buspassws.model.*;
 rule "minusTenPercent"
     no-loop
     when
-       $i: ItemCountUser( getItems().size() < 2 )
+       $i: ItemCount( getCount() > 20, isWholesale() == false, $price: getItem().getPrice() )
     then
-        System.out.println("droolsika poz");
-        modify($i){ getItems().clear(); }
+       modify ($i) { getItem().setPrice($price * 0.9); }
     end
 
+rule "minusFivePercent"
+    no-loop
+    when
+       $i: ItemCount( getCount() > 5, $cat: getItem().getCategory(), $cat == "PC" || $cat == "TV" || $cat == "Laptops", $price: getItem().getPrice() )
+    then
+       modify ($i) { getItem().setPrice($price * 0.95); }
+    end
+
+rule "minusSevenPercent"
+    no-loop
+    when
+       $i: ItemCount( isWholesale() == true, getPrice() > 500, $price: getItem().getPrice() )
+    then
+       modify ($i) { getItem().setPrice($price * 0.93); }
+    end

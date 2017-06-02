@@ -40,6 +40,7 @@ public class ItemController {
         Item i12 = new Item("621", "Samsung Galaxy S8", "Samsung", 850, 10, "2017-06-01", RecordStatus.ACTIVE, false, 2);
         Item i13 = new Item("820", "iPhone 7", "Apple", 750, 10, "2017-06-01", RecordStatus.ACTIVE, false, 2);
         Item i14 = new Item("821", "iPhone 7plus", "Apple", 1250, 10, "2017-06-01", RecordStatus.ACTIVE, false, 2);
+        Item i15 = new Item("921", "Samsung 47'", "TV", 1250, 10, "2017-06-01", RecordStatus.ACTIVE, false, 2);
 
         repository.save(i1);
         repository.save(i2);
@@ -55,7 +56,7 @@ public class ItemController {
         repository.save(i12);
         repository.save(i13);
         repository.save(i14);
-
+        repository.save(i15);
 
         return "ok";
     }
