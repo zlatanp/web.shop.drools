@@ -984,9 +984,9 @@ function saveRealRacun(){
         data: {points : points, pravaCena : pravaCena, unique : unique},
         success: function(data){
             console.log(data);
-            showHistory();
         }
     });
+    showHistory();
     return false;
 }
 
@@ -999,6 +999,32 @@ function showHistory(){
         data: {username : username},
         success: function(data){
             console.log(data);
+            $('#center').html('');
+            if(data.length > 0){
+
+                for(var i=0; i<data.length; i++) {
+                    $('#center').append('<table id="historyTable'+ i +'" border="1"><tr><th>Datum</th><th>Stvarna cena</th><th>Cena sa popustom</th><th>Dodatni Popusti</th></tr></table>');
+                    var obj = data[i];
+                    $('#historyTable'+ i +'').append('<tr><td>'+ String(new Date(obj.datum).subtractdHours(2)) +'</td><td>&nbsp;&nbsp;' + obj.prvaCena + '$</td><td>&nbsp;&nbsp;' + obj.cena + '$</td><td>P1:' + obj.dodatnipopustCele1 + ', P2:' + obj.dodatnipopustCele2 + ', P3:' + obj.dodatnipopustCele3 + '</td></tr>');
+                    $('#center').append('<table id="itemTable'+ i +'" border="1"><tr><th>Naziv</th><th>Cena</th><th>Kolicina</th><th>Popust</th><th>Cena sa popustom</th></tr></table>');
+
+                    var itemi = obj.items;
+                    for (var j = 0; j < itemi.length; j++) {
+                        item = itemi[j];
+                        $('#itemTable'+ i +'').append('<tr><td>&nbsp;&nbsp;' + item.item.name + '</td><td>&nbsp;&nbsp;' + item.item.price + '$</td><td>&nbsp;&nbsp;'+ item.count+'</td><td>Popust1:' + item.dodatnipopust1 + ', Popust2:' + item.dodatnipopust2 + ', Popust3:' + item.dodatnipopust3 + '</td><td>&nbsp;&nbsp;'+item.price+'$</td></tr>');
+
+                    }
+                    $('#center').append('<br>');
+                    $('#center').append('<br>');
+                }
+
+            }else{
+                $('#center').append('<h3>History is empty!</h3>');
+            }
+
+
         }
     });
+
+    return false;
 }

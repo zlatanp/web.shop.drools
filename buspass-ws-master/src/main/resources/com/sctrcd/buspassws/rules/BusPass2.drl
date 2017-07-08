@@ -28,7 +28,7 @@ rule "srebrniZlatniKupac"
     when
        $i: ItemCountUser( $popust: getPopust(), $tipKupca: getU().getBuyerProfile().getCategory.getName, $tipKupca == "SREBRNI" || $tipKupca == "ZLATNI")
     then
-       modify ($i) { setPopust($popust + 1), setDodatnipopustCele2("Dodatni popust 1%, stariji od 2 godine kupac")}
+       modify ($i) { setPopust($popust + 1), setDodatnipopustCele2("Dodatni 1%, stariji od 2 godine kupac")}
     end
 
 
