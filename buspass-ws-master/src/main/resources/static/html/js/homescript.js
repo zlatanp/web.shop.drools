@@ -905,7 +905,7 @@ function card(){
 
     }
 
-    $('#center').append('<br><button onclick="return statusCard()">See Status!</button>');
+    $('#center').append('<br><button onclick="return statusCard()">Buy!</button>');
 
 }
 
@@ -931,15 +931,74 @@ function statusCard(){
         data: {json : json, user : username},
         success: function(data){
              console.log(data);
+            $('#center').html('');
+            $('#center').append('<br><h5>Price without actions: ' + data.prvaCena + '</h5>');
+            $('#center').append('<h5>Price after applied actions :' + data.cena + '</h5>');
+            $('#center').append('<h5>Pay with reward points, you have: <p id="points">' + data.korisnickiPoeni + ' points</p><input onchange="dodajemPoene(\''+ data.cena +'\',\''+ data.korisnickiPoeni +'\')" type="number" min="0" id="enterPoints" value="0" /></h5>');
+            $('#center').append('<h5>Final price: $ <p id="finallPrice"> ' + data.cena + ' </p></h5>');
+            $('#center').append('<br><button onclick="saveRealRacun()">Buy!</button>');
+            $('#center').append('<p hidden id="unique">'+ data.unique +'</p>');
            }
     });
 
 
-    $('#center').append('<br><h5>Price without actions: <p id="priceWithoutActions">0</p></h5>');
-    $('#center').append('<h5>Price with actions: <p id="priceWithActions">0</p></h5>');
-    $('#center').append('<h5>Pay with reward points (you have: )<p id="points">0</p> points) <p id="enterPoints">0</p></h5>');
-    $('#center').append('<h5>Finish price: <p id="finishPrice">0</p></h5>');
-    $('#center').append('<br><button>Order!</button>');
+
 
     return false;
+}
+
+function dodajemPoene(prvaCena, korisnickiPoeni){
+
+    var points = document.getElementById('enterPoints').value;
+    var poeni = parseInt(points);
+
+    var prvaCenaInt = parseInt(prvaCena);
+    var korisnickiPoeniInt = parseInt(korisnickiPoeni);
+
+    if(isNaN(poeni) || poeni > korisnickiPoeniInt){
+        $('#enterPoints').text('0');
+        $('#finallPrice').text(prvaCenaInt + '');
+    }else{
+        var noviiznos = prvaCenaInt - poeni;
+        if(poeni = 0){
+            $('#enterPoints').text('0');
+            $('#finallPrice').text(prvaCenaInt + '');
+        }else {
+            $('#finallPrice').text(noviiznos + '');
+        }
+    }
+
+    return false;
+
+}
+
+function saveRealRacun(){
+    var points = document.getElementById('enterPoints').value;
+    var pravaCena = $('#finallPrice').text();
+    var unique = $('#unique').text();
+
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/save/',
+        dataType: 'json',
+        data: {points : points, pravaCena : pravaCena, unique : unique},
+        success: function(data){
+            console.log(data);
+            showHistory();
+        }
+    });
+    return false;
+}
+
+function showHistory(){
+    $('#center').html('');
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/getHistory',
+        dataType: 'json',
+        data: {username : username},
+        success: function(data){
+            console.log(data);
+        }
+    });
 }

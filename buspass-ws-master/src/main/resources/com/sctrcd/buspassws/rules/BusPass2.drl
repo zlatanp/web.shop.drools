@@ -53,4 +53,3 @@ no-loop
        modify ($i) { setPopust($popust + 3)}
     end
 
-    

@@ -1,5 +1,7 @@
 package com.sctrcd.buspassws.model;
 
+import org.springframework.data.annotation.Id;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -8,9 +10,14 @@ import java.util.Date;
  */
 public class ItemCountUser {
 
+    @Id
+    private String unique;
+    private int id;
     private User u;
     private ArrayList<ItemCount> items = new ArrayList<ItemCount>();
     private double cena;
+    private double prvaCena;
+    private int korisnickiPoeni;
     private Date datum;
     private int popust;
 
@@ -60,5 +67,29 @@ public class ItemCountUser {
 
     public void setPopust(int popust) {
         this.popust = popust;
+    }
+
+    public double getPrvaCena() {
+        return prvaCena;
+    }
+
+    public void setPrvaCena(double prvaCena) {
+        this.prvaCena = prvaCena;
+    }
+
+    public int getKorisnickiPoeni() {
+        return korisnickiPoeni;
+    }
+
+    public void setKorisnickiPoeni(int korisnickiPoeni) {
+        this.korisnickiPoeni = korisnickiPoeni;
+    }
+
+    public String getUnique() {
+        return unique;
+    }
+
+    public void setUnique(String unique) {
+        this.unique = unique;
     }
 }

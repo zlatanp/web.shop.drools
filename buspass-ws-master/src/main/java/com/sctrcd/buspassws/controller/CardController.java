@@ -1,10 +1,7 @@
 package com.sctrcd.buspassws.controller;
 
 import com.sctrcd.buspassws.model.*;
-import com.sctrcd.buspassws.repository.ActionEventRepository;
-import com.sctrcd.buspassws.repository.ItemCategoryRepository;
-import com.sctrcd.buspassws.repository.ItemRepository;
-import com.sctrcd.buspassws.repository.UserRepository;
+import com.sctrcd.buspassws.repository.*;
 import com.sctrcd.buspassws.service.DroolsService;
 import com.sctrcd.buspassws.service.DroolsServiceCeoRacun;
 import org.json.JSONArray;
@@ -14,6 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +31,9 @@ public class CardController {
 
     @Autowired
     private ItemRepository itemRepository;
+
+    @Autowired
+    private CardRepository cardRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -52,7 +55,7 @@ public class CardController {
         this.droolsServiceCeoRacun = droolsServiceCeoRacun;
     }
 
-    private void CardControll(ItemCountUser card){
+    private void CardControll(ItemCountUser card) {
         Date d = card.getU().getDateOfRegistration();
         Calendar cal = Calendar.getInstance();
         cal.setTime(d);
@@ -66,6 +69,9 @@ public class CardController {
 
     @RequestMapping(value = "/count", method = RequestMethod.GET, produces = "application/json")
     public ItemCountUser addItem(@RequestParam("json") String json, @RequestParam("user") String username) {
+
+        SecureRandom random = new SecureRandom();
+        String kod = new BigInteger(130, random).toString(32);
 
         System.out.println(json + username);
 
@@ -89,7 +95,7 @@ public class CardController {
 
             Date datum = new Date();
 
-            if(datum.after(dateOd) && datum.before(datumDo)) {
+            if (datum.after(dateOd) && datum.before(datumDo)) {
                 akcijskiDogadjaj = e;
             }
 
@@ -107,19 +113,19 @@ public class CardController {
         User u = userRepository.findByUsername(username);
         card.setU(u);
 
-        for(int i=0;i<itemCodeCountValue.size(); i+=2){
+        for (int i = 0; i < itemCodeCountValue.size(); i += 2) {
 
-            int count = Integer.parseInt(itemCodeCountValue.get(i+1));
+            int count = Integer.parseInt(itemCodeCountValue.get(i + 1));
             Item item = itemRepository.findByCode(itemCodeCountValue.get(i));
 
             boolean wholesale = false;
             String category = item.getCategory();
             List<ItemCategory> allCat = itemCategoryRepository.findAll();
             for (ItemCategory cat : allCat) {
-                if(cat.getName().equals(category)){
-                    if(cat.isWholesale()){
+                if (cat.getName().equals(category)) {
+                    if (cat.isWholesale()) {
                         wholesale = true;
-                    }else{
+                    } else {
                         wholesale = false;
                     }
                 }
@@ -131,18 +137,20 @@ public class CardController {
             ItemCount c = new ItemCount(item, count, wholesale, item.getPrice() * count, false, new Date(), 0, cat.getSuperCategory(), cat.getMaxDiscount());
             card.getItems().add(c);
 
+            card.setPrvaCena(card.getPrvaCena() + c.getPrice());
+
         }
 
-        System.out.println( " card: " + card.getItems().get(0).getItem().getPrice());
+        System.out.println(" card: " + card.getItems().get(0).getItem().getPrice());
         //drools things
-        for (int i=0; i<card.getItems().size(); i++) {
+        for (int i = 0; i < card.getItems().size(); i++) {
 
             ItemCount it = card.getItems().get(i);
             droolsService.getItemCount(it, akcijskiDogadjaj);
         }
 
         double cena = 0;
-        for (int i=0; i<card.getItems().size(); i++) {
+        for (int i = 0; i < card.getItems().size(); i++) {
             cena += card.getItems().get(i).getPrice();
         }
         card.setCena(cena);
@@ -153,11 +161,49 @@ public class CardController {
         d = cal.getTime();
         card.getU().setDateOfRegistration(d);
         droolsServiceCeoRacun.getItemCount(card);
+        card.setKorisnickiPoeni(card.getU().getBuyerProfile().getRewardPoints());
+        card.setUnique(kod);
 
-        System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice() + " popist: " + card.getItems().get(0).getPopust() + " cena " + card.getItems().get(0).getPrice()); CardControll(card);
+        System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice() + " popist: " + card.getItems().get(0).getPopust() + " cena " + card.getItems().get(0).getPrice());
+        CardControll(card);
 
         System.out.println("cena na kraj: " + card.getCena() + " popust: " + card.getPopust());
 
+        cardRepository.save(card);
+
         return card;
     }
+
+    @RequestMapping(value = "/save", method = RequestMethod.GET, produces = "application/json")
+    public void saveItem(@RequestParam("points") String points, @RequestParam("pravaCena") String pravaCena, @RequestParam("unique") String unique) {
+        System.out.println(points + " " +pravaCena + " " +unique);
+
+        ItemCountUser itemCard = cardRepository.findByUnique(unique);
+        itemCard.setCena(Double.parseDouble(pravaCena));
+        cardRepository.save(itemCard);
+
+        User u = itemCard.getU();
+        u.getBuyerProfile().setRewardPoints(u.getBuyerProfile().getRewardPoints() - Integer.parseInt(points));
+
+        //TODO
+        //useru setuj nove poene
+    }
+
+    @RequestMapping(value = "/getHistory", method = RequestMethod.GET, produces = "application/json")
+    public ArrayList<ItemCountUser> getHistory(@RequestParam("username") String username) {
+        System.out.println(username);
+
+        List<ItemCountUser> allCards = cardRepository.findAll();
+        ArrayList<ItemCountUser> myCards = new ArrayList<ItemCountUser>();
+
+        for (ItemCountUser i: allCards) {
+            User u = i.getU();
+            if(u.getUsername().equals(username))
+                myCards.add(i);
+        }
+
+        return myCards;
+    }
+
 }
+
