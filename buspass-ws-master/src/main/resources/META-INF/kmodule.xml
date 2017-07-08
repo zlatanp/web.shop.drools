@@ -10,4 +10,8 @@
         <ksession name="DroolsServiceCeoRacun" />
     </kbase>
 
+    <kbase name="BusPass3" packages="com.sctrcd.buspassws.rules">
+        <ksession name="finalPrice" />
+    </kbase>
+
 </kmodule>

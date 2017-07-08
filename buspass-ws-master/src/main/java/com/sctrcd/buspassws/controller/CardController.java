@@ -52,6 +52,18 @@ public class CardController {
         this.droolsServiceCeoRacun = droolsServiceCeoRacun;
     }
 
+    private void CardControll(ItemCountUser card){
+        Date d = card.getU().getDateOfRegistration();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.YEAR, -2);
+        d = cal.getTime();
+        card.getU().setDateOfRegistration(d);
+
+        card.setCena(card.getCena() - (card.getCena() * card.getPopust() / 100));
+
+    }
+
     @RequestMapping(value = "/count", method = RequestMethod.GET, produces = "application/json")
     public ItemCountUser addItem(@RequestParam("json") String json, @RequestParam("user") String username) {
 
@@ -142,8 +154,7 @@ public class CardController {
         card.getU().setDateOfRegistration(d);
         droolsServiceCeoRacun.getItemCount(card);
 
-
-        System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice() + " popist: " + card.getItems().get(0).getPopust() + " cena " + card.getItems().get(0).getPrice());
+        System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice() + " popist: " + card.getItems().get(0).getPopust() + " cena " + card.getItems().get(0).getPrice()); CardControll(card);
 
         System.out.println("cena na kraj: " + card.getCena() + " popust: " + card.getPopust());
 
