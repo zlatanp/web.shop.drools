@@ -7,15 +7,17 @@ declare Broj
 end
 
 
-rule "racunVeciOd200.000"
+rule "racunVeciOd200.000" salience 100
+lock-on-active
     no-loop
     when
-       $i: ItemCountUser( $popust: getPopust(), getCena() > 200000)
+       $i: ItemCountUser( $popust: getPopust(), getCena() > 2000)
     then
        modify ($i) { setPopust($popust + 5), setOsnovnipopustCele("Osnovni popust 5%")}
     end
 
-rule "starijiOd2god"
+rule "starijiOd2god" salience 80
+lock-on-active
     no-loop
     when
        $i: ItemCountUser( $popust: getPopust(), $danasnjiDatum: getDatum(), $datumRegistracije: getU().getDateOfRegistration(), $datumRegistracije <= $danasnjiDatum)
@@ -23,17 +25,19 @@ rule "starijiOd2god"
        modify ($i) { setPopust($popust + 1), setDodatnipopustCele1("Dodatni popust 1% na ceo racun")}
     end
 
-rule "srebrniZlatniKupac"
+rule "srebrniZlatniKupac" salience 60
+lock-on-active
     no-loop
     when
        $i: ItemCountUser( $popust: getPopust(), $tipKupca: getU().getBuyerProfile().getCategory.getName, $tipKupca == "SREBRNI" || $tipKupca == "ZLATNI")
     then
-       modify ($i) { setPopust($popust + 1), setDodatnipopustCele2("Dodatni 1%, stariji od 2 godine kupac")}
+       modify ($i) { setPopust($popust + 1), setDodatnipopustCele2("1%, SREBRNI ILI ZLATNI kupac")}
     end
 
 
 
-rule "dodatni3postoPopust"
+rule "dodatni3postoPopust" salience 40
+lock-on-active
     no-loop
     when
     $v : Broj( $pom: getBroj())
@@ -43,7 +47,7 @@ rule "dodatni3postoPopust"
        modify ($v) {setBroj($pom + 1)}
     end
 
-rule "proveriDodatni3PostoPopust"
+rule "proveriDodatni3PostoPopust" salience 20
 no-loop
     when
     $v: Broj( $broj: getBroj());

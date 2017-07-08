@@ -3,53 +3,59 @@ package com.sctrcd.busspassws.rules
 import com.sctrcd.buspassws.model.*;
 
 
-rule "minusTenPercent"
+rule "minusTenPercent" salience 120
+lock-on-active
     no-loop
     when
        $i: ItemCount($popustpostojeci: getPopust(), getCount() > 20, isWholesale() == false, $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { setPopust($popustpostojeci + 10), setSnizeno(true), setStavkaRacunaPopust("minus 10%");}
+       modify ($i) { setPopust($popustpostojeci + 10), setSnizeno(true), setStavkaRacunaPopust("10%")}
     end
 
-rule "minusSevenPercent"
+rule "minusSevenPercent" salience 100
+lock-on-active
     no-loop
     when
        $i: ItemCount( $popustpostojeci: getPopust(), isWholesale() == true, getPrice() > 500, $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { setPopust($popustpostojeci + 7), setSnizeno(true), setStavkaRacunaPopust("minus 10%");}
+       modify ($i) { setPopust($popustpostojeci + 7), setSnizeno(true), setStavkaRacunaPopust("7%")}
     end
 
 
-rule "minusFivePercent"
+rule "minusFivePercent" salience 80
+lock-on-active
     no-loop
     when
        $i: ItemCount( $popustpostojeci: getPopust(), getCount() > 5, $cat: getNadkategorija(), $cat == "PC" || $cat == "TV" || $cat == "Laptops", $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { setPopust($popustpostojeci + 5), setSnizeno(true), setStavkaRacunaPopust("minus 10%");}
+       modify ($i) { setPopust($popustpostojeci + 5), setSnizeno(true), setStavkaRacunaPopust("5%")}
     end
 
-rule "dodatniPopust"
+rule "dodatniPopust" salience 60
+lock-on-active
     no-loop
     when
         $i: ItemCount($popustpostojeci : getPopust(), $katerogija: getItem().getCategory(), $nadkategorija: getNadkategorija() )
         ActionEvent($naziv: getName(), $popust: getDiscount(), getCategory() contains $katerogija || getCategory() contains $nadkategorija)
     then
-       modify ($i) { setPopust($popustpostojeci + $popust), setDodatnipopust3($naziv); }
+       modify ($i) { setPopust($popustpostojeci + $popust), setDodatnipopust3($naziv)}
     end
 
-rule "finalniProracunStavke"
+rule "finalniProracunStavke" salience 40
+lock-on-active
     no-loop
     when
         $i: ItemCount($popustpostojeci : getPopust(), $maxpopust: getMaxDiscount(), $popustpostojeci > $maxpopust)
     then
-       modify ($i) { setPopust($maxpopust); }
+       modify ($i) { setPopust($maxpopust)}
     end
 
 
-rule "finalnaCena"
+rule "finalnaCena" salience 20
+lock-on-active
     no-loop
     when
         $i: ItemCount($cena : getPrice(), $popust: getPopust())
     then
-       modify ($i) { setPrice($cena - ($cena * $popust / 100)); }
+       modify ($i) { setPrice($cena - ($cena * $popust / 100)) }
     end
