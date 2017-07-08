@@ -6,6 +6,7 @@ import com.sctrcd.buspassws.repository.ItemCategoryRepository;
 import com.sctrcd.buspassws.repository.ItemRepository;
 import com.sctrcd.buspassws.repository.UserRepository;
 import com.sctrcd.buspassws.service.DroolsService;
+import com.sctrcd.buspassws.service.DroolsServiceCeoRacun;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,10 +43,13 @@ public class CardController {
 
     private final DroolsService droolsService;
 
+    private final DroolsServiceCeoRacun droolsServiceCeoRacun;
+
 
     @Autowired
-    public CardController(DroolsService droolsService) {
+    public CardController(DroolsService droolsService, DroolsServiceCeoRacun droolsServiceCeoRacun) {
         this.droolsService = droolsService;
+        this.droolsServiceCeoRacun = droolsServiceCeoRacun;
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET, produces = "application/json")
@@ -79,6 +84,7 @@ public class CardController {
         }
 
         ItemCountUser card = new ItemCountUser(); //All info for drools
+        card.setDatum(new Date());
 
         JSONArray arr = new JSONArray(json);
         ArrayList<String> itemCodeCountValue = new ArrayList<String>();
@@ -121,10 +127,25 @@ public class CardController {
 
             ItemCount it = card.getItems().get(i);
             droolsService.getItemCount(it, akcijskiDogadjaj);
-            //droolsServiceSeccond.getItemCount(it,akcijskiDogadjaj);
         }
 
+        double cena = 0;
+        for (int i=0; i<card.getItems().size(); i++) {
+            cena += card.getItems().get(i).getPrice();
+        }
+        card.setCena(cena);
+        Date d = card.getU().getDateOfRegistration();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.YEAR, 2);
+        d = cal.getTime();
+        card.getU().setDateOfRegistration(d);
+        droolsServiceCeoRacun.getItemCount(card);
+
+
         System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice() + " popist: " + card.getItems().get(0).getPopust() + " cena " + card.getItems().get(0).getPrice());
+
+        System.out.println("cena na kraj: " + card.getCena() + " popust: " + card.getPopust());
 
         return card;
     }

@@ -1,6 +1,8 @@
 package com.sctrcd.buspassws.controller;
 
 import com.sctrcd.buspassws.enumeration.UserType;
+import com.sctrcd.buspassws.model.BuyerCategory;
+import com.sctrcd.buspassws.model.BuyerProfile;
 import com.sctrcd.buspassws.model.User;
 import com.sctrcd.buspassws.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,10 @@ public class MainRegistrationController {
         if(u != null) {
             return "used";
         }else {
+            BuyerCategory bc = new BuyerCategory("1", "Bronzani", 1,1,1);
+            BuyerProfile p = new BuyerProfile("neka adresa", 0, bc, null);
             u = new User(username, pass, name, surname, UserType.BUYER, new Date());
+            u.setBuyerProfile(p);
             repository.save(u);
 
             return "ok";

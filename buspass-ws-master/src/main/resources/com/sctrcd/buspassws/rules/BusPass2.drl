@@ -1,0 +1,27 @@
+package com.sctrcd.busspassws.rules
+
+import com.sctrcd.buspassws.model.*;
+
+rule "racunVeciOd200.000"
+    no-loop
+    when
+       $i: ItemCountUser( $popust: getPopust(), getCena() > 200000)
+    then
+       modify ($i) { setPopust($popust + 5)}
+    end
+
+rule "starijiOd2god"
+    no-loop
+    when
+       $i: ItemCountUser( $popust: getPopust(), $danasnjiDatum: getDatum(), $datumRegistracije: getU().getDateOfRegistration(), $datumRegistracije <= $danasnjiDatum)
+    then
+       modify ($i) { setPopust($popust + 1)}
+    end
+
+rule "srebrniZlatniKupac"
+    no-loop
+    when
+       $i: ItemCountUser( $popust: getPopust(), $tipKupca: getU().getBuyerProfile().getCategory.getName, $tipKupca == "SREBRNI" || $tipKupca == "ZLATNI")
+    then
+       modify ($i) { setPopust($popust + 1)}
+    end

@@ -6,4 +6,8 @@
     	<ksession name="ItemCountUserSession" />
     </kbase>
 
+    <kbase name="BusPass2" packages="com.sctrcd.buspassws.rules">
+        <ksession name="DroolsServiceCeoRacun" />
+    </kbase>
+
 </kmodule>
