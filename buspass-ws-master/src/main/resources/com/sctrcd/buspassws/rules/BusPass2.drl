@@ -2,6 +2,11 @@ package com.sctrcd.busspassws.rules
 
 import com.sctrcd.buspassws.model.*;
 
+declare Broj
+    broj: int
+end
+
+
 rule "racunVeciOd200.000"
     no-loop
     when
@@ -24,4 +29,26 @@ rule "srebrniZlatniKupac"
        $i: ItemCountUser( $popust: getPopust(), $tipKupca: getU().getBuyerProfile().getCategory.getName, $tipKupca == "SREBRNI" || $tipKupca == "ZLATNI")
     then
        modify ($i) { setPopust($popust + 1)}
+    end
+
+
+
+rule "dodatni3postoPopust"
+    no-loop
+    when
+    $v : Broj( $pom: getBroj())
+    $i: ItemCountUser($listaItema: getItems(), $celaCena: getCena())
+    ItemCount($cena: getPrice(), $cena > $celaCena / 2) from $listaItema
+    then
+       modify ($v) {setBroj($pom + 1)}
+    end
+
+rule "proveriDodatni3PostoPopust"
+no-loop
+    when
+    $v: Broj( $broj: getBroj());
+    $i: ItemCountUser( $popust: getPopust(), $cena: getCena(), $cena > 50000 && $broj >9)
+
+    then
+       modify ($i) { setPopust($popust + 3)}
     end
