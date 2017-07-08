@@ -2,6 +2,8 @@ package com.sctrcd.buspassws.model;
 
 import org.kie.api.definition.type.PropertyReactive;
 
+import java.util.Date;
+
 /**
  * Created by zlatan on 2.6.17..
  */
@@ -12,14 +14,24 @@ public class ItemCount {
     private int count;
     private boolean wholesale;
     private double price;
+    public boolean snizeno;
+    public Date datum;
+    public int popust = 0;
+    public String nadkategorija;
+    public int maxDiscount;
 
     public ItemCount() { }
 
-    public ItemCount(Item i, int count, boolean wholesale, double price) {
+    public ItemCount(Item i, int count, boolean wholesale, double price, boolean snizeno, Date datum, int popust, String supercat, int maxDiscount) {
         this.i = i;
         this.count = count;
         this.wholesale = wholesale;
         this.price = price;
+        this.snizeno = snizeno;
+        this.datum = datum;
+        this.nadkategorija = supercat;
+        this.popust = popust;
+        this.maxDiscount = maxDiscount;
 
     }
 
@@ -53,5 +65,45 @@ public class ItemCount {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isSnizeno() {
+        return snizeno;
+    }
+
+    public void setSnizeno(boolean snizeno) {
+        this.snizeno = snizeno;
+    }
+
+    public Date getDatum() {
+        return datum;
+    }
+
+    public void setDatum(Date datum) {
+        this.datum = datum;
+    }
+
+    public int getPopust() {
+        return popust;
+    }
+
+    public void setPopust(int popust) {
+        this.popust = popust;
+    }
+
+    public String getNadkategorija() {
+        return nadkategorija;
+    }
+
+    public void setNadkategorija(String nadkategorija) {
+        this.nadkategorija = nadkategorija;
+    }
+
+    public int getMaxDiscount() {
+        return maxDiscount;
+    }
+
+    public void setMaxDiscount(int maxDiscount) {
+        this.maxDiscount = maxDiscount;
     }
 }

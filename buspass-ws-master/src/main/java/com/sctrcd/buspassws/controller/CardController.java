@@ -1,6 +1,7 @@
 package com.sctrcd.buspassws.controller;
 
 import com.sctrcd.buspassws.model.*;
+import com.sctrcd.buspassws.repository.ActionEventRepository;
 import com.sctrcd.buspassws.repository.ItemCategoryRepository;
 import com.sctrcd.buspassws.repository.ItemRepository;
 import com.sctrcd.buspassws.repository.UserRepository;
@@ -12,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,7 +36,11 @@ public class CardController {
     @Autowired
     private ItemCategoryRepository itemCategoryRepository;
 
+    @Autowired
+    private ActionEventRepository actionEventRepository;
+
     private final DroolsService droolsService;
+
 
     @Autowired
     public CardController(DroolsService droolsService) {
@@ -42,6 +51,32 @@ public class CardController {
     public ItemCountUser addItem(@RequestParam("json") String json, @RequestParam("user") String username) {
 
         System.out.println(json + username);
+
+        List<ActionEvent> akcija = actionEventRepository.findAll();
+        ActionEvent akcijskiDogadjaj = null;
+
+        for (ActionEvent e : akcija) {
+            String od = e.getFrom();
+            String doo = e.getTo();
+
+            Date dateOd = null;
+            Date datumDo = null;
+
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                dateOd = format.parse(od);
+                datumDo = format.parse(doo);
+            } catch (ParseException e1) {
+                e1.printStackTrace();
+            }
+
+            Date datum = new Date();
+
+            if(datum.after(dateOd) && datum.before(datumDo)) {
+                akcijskiDogadjaj = e;
+            }
+
+        }
 
         ItemCountUser card = new ItemCountUser(); //All info for drools
 
@@ -73,7 +108,9 @@ public class CardController {
 
             }
 
-            ItemCount c = new ItemCount(item, count, wholesale, item.getPrice() * count);
+            ItemCategory cat = itemCategoryRepository.findByName(item.getCategory());
+
+            ItemCount c = new ItemCount(item, count, wholesale, item.getPrice() * count, false, new Date(), 0, cat.getSuperCategory(), cat.getMaxDiscount());
             card.getItems().add(c);
 
         }
@@ -83,11 +120,12 @@ public class CardController {
         for (int i=0; i<card.getItems().size(); i++) {
 
             ItemCount it = card.getItems().get(i);
-            droolsService.getItemCount(it);
+            droolsService.getItemCount(it, akcijskiDogadjaj);
+            //droolsServiceSeccond.getItemCount(it,akcijskiDogadjaj);
         }
 
-        System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice());
+        System.out.println(" donecard: " + card.getItems().get(0).getItem().getPrice() + " popist: " + card.getItems().get(0).getPopust() + " cena " + card.getItems().get(0).getPrice());
+
         return card;
     }
-
 }

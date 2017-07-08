@@ -6,23 +6,50 @@ import com.sctrcd.buspassws.model.*;
 rule "minusTenPercent"
     no-loop
     when
-       $i: ItemCount( getCount() > 20, isWholesale() == false, $price: getItem().getPrice() )
+       $i: ItemCount( $popustpostojeci: getPopust(), getCount() > 20, isWholesale() == false, $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { getItem().setPrice($price * 0.9); }
-    end
-
-rule "minusFivePercent"
-    no-loop
-    when
-       $i: ItemCount( getCount() > 5, $cat: getItem().getCategory(), $cat == "PC" || $cat == "TV" || $cat == "Laptops", $price: getItem().getPrice() )
-    then
-       modify ($i) { getItem().setPrice($price * 0.95); }
+       modify ($i) { setPopust($popustpostojeci + 10), setSnizeno(true);}
     end
 
 rule "minusSevenPercent"
     no-loop
     when
-       $i: ItemCount( isWholesale() == true, getPrice() > 500, $price: getItem().getPrice() )
+       $i: ItemCount( $popustpostojeci: getPopust(), isWholesale() == true, getPrice() > 500, $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { getItem().setPrice($price * 0.93); }
+       modify ($i) { setPopust($popustpostojeci + 7), setSnizeno(true);}
+    end
+
+
+rule "minusFivePercent"
+    no-loop
+    when
+       $i: ItemCount( $popustpostojeci: getPopust(), getCount() > 5, $cat: getNadkategorija(), $cat == "PC" || $cat == "TV" || $cat == "Laptops", $price: getItem().getPrice(), isSnizeno() == false )
+    then
+       modify ($i) { setPopust($popustpostojeci + 5), setSnizeno(true);}
+    end
+
+rule "dodatniPopust"
+    no-loop
+    when
+        $i: ItemCount($popustpostojeci : getPopust(), $katerogija: getItem().getCategory(), $nadkategorija: getNadkategorija() )
+        ActionEvent($popust: getDiscount(), getCategory() contains $katerogija || getCategory() contains $nadkategorija)
+    then
+       modify ($i) { setPopust($popustpostojeci + $popust); }
+    end
+
+rule "finalniProracunStavke"
+    no-loop
+    when
+        $i: ItemCount($popustpostojeci : getPopust(), $maxpopust: getMaxDiscount(), $popustpostojeci > $maxpopust)
+    then
+       modify ($i) { setPopust($maxpopust); }
+    end
+
+
+rule "finalnaCena"
+    no-loop
+    when
+        $i: ItemCount($cena : getPrice(), $popust: getPopust())
+    then
+       modify ($i) { setPrice($cena - ($cena * $popust / 100)); }
     end

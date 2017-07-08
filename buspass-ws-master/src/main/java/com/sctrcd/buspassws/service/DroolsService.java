@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.sctrcd.buspassws.model.ItemCount;
-import com.sctrcd.buspassws.model.ItemCountUser;
+import com.sctrcd.buspassws.model.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.api.runtime.ObjectFilter;
@@ -14,9 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.sctrcd.buspassws.model.BusPass;
-import com.sctrcd.buspassws.model.Person;
 
 @Service
 public class DroolsService {
@@ -35,9 +31,10 @@ public class DroolsService {
      * Create a new session, insert a person's details and fire rules to
      * determine what kind of bus pass is to be issued.
      */
-    public ItemCount getItemCount(ItemCount card) {
+    public ItemCount getItemCount(ItemCount card, ActionEvent e) {
         KieSession kieSession = kieContainer.newKieSession("ItemCountUserSession");
         kieSession.insert(card);
+        kieSession.insert(e);
         kieSession.fireAllRules();
 
         ItemCount doneItem = findItemCount(kieSession);
