@@ -6,9 +6,9 @@ import com.sctrcd.buspassws.model.*;
 rule "minusTenPercent"
     no-loop
     when
-       $i: ItemCount( $popustpostojeci: getPopust(), getCount() > 20, isWholesale() == false, $price: getItem().getPrice(), isSnizeno() == false )
+       $i: ItemCount($popustpostojeci: getPopust(), getCount() > 20, isWholesale() == false, $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { setPopust($popustpostojeci + 10), setSnizeno(true);}
+       modify ($i) { setPopust($popustpostojeci + 10), setSnizeno(true), setStavkaRacunaPopust("minus 10%");}
     end
 
 rule "minusSevenPercent"
@@ -16,7 +16,7 @@ rule "minusSevenPercent"
     when
        $i: ItemCount( $popustpostojeci: getPopust(), isWholesale() == true, getPrice() > 500, $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { setPopust($popustpostojeci + 7), setSnizeno(true);}
+       modify ($i) { setPopust($popustpostojeci + 7), setSnizeno(true), setStavkaRacunaPopust("minus 10%");}
     end
 
 
@@ -25,16 +25,16 @@ rule "minusFivePercent"
     when
        $i: ItemCount( $popustpostojeci: getPopust(), getCount() > 5, $cat: getNadkategorija(), $cat == "PC" || $cat == "TV" || $cat == "Laptops", $price: getItem().getPrice(), isSnizeno() == false )
     then
-       modify ($i) { setPopust($popustpostojeci + 5), setSnizeno(true);}
+       modify ($i) { setPopust($popustpostojeci + 5), setSnizeno(true), setStavkaRacunaPopust("minus 10%");}
     end
 
 rule "dodatniPopust"
     no-loop
     when
         $i: ItemCount($popustpostojeci : getPopust(), $katerogija: getItem().getCategory(), $nadkategorija: getNadkategorija() )
-        ActionEvent($popust: getDiscount(), getCategory() contains $katerogija || getCategory() contains $nadkategorija)
+        ActionEvent($naziv: getName(), $popust: getDiscount(), getCategory() contains $katerogija || getCategory() contains $nadkategorija)
     then
-       modify ($i) { setPopust($popustpostojeci + $popust); }
+       modify ($i) { setPopust($popustpostojeci + $popust), setDodatnipopust3($naziv); }
     end
 
 rule "finalniProracunStavke"

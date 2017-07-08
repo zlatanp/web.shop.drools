@@ -12,7 +12,7 @@ rule "racunVeciOd200.000"
     when
        $i: ItemCountUser( $popust: getPopust(), getCena() > 200000)
     then
-       modify ($i) { setPopust($popust + 5)}
+       modify ($i) { setPopust($popust + 5), setOsnovnipopustCele("Osnovni popust 5%")}
     end
 
 rule "starijiOd2god"
@@ -20,7 +20,7 @@ rule "starijiOd2god"
     when
        $i: ItemCountUser( $popust: getPopust(), $danasnjiDatum: getDatum(), $datumRegistracije: getU().getDateOfRegistration(), $datumRegistracije <= $danasnjiDatum)
     then
-       modify ($i) { setPopust($popust + 1)}
+       modify ($i) { setPopust($popust + 1), setDodatnipopustCele1("Dodatni popust 1% na ceo racun")}
     end
 
 rule "srebrniZlatniKupac"
@@ -28,7 +28,7 @@ rule "srebrniZlatniKupac"
     when
        $i: ItemCountUser( $popust: getPopust(), $tipKupca: getU().getBuyerProfile().getCategory.getName, $tipKupca == "SREBRNI" || $tipKupca == "ZLATNI")
     then
-       modify ($i) { setPopust($popust + 1)}
+       modify ($i) { setPopust($popust + 1), setDodatnipopustCele2("Dodatni popust 1%, stariji od 2 godine kupac")}
     end
 
 
@@ -50,6 +50,6 @@ no-loop
     $i: ItemCountUser( $popust: getPopust(), $cena: getCena(), $cena > 50000 && $broj >9)
 
     then
-       modify ($i) { setPopust($popust + 3)}
+       modify ($i) { setPopust($popust + 3), setDodatnipopustCele3("Dodatni popust od 3%")}
     end
 

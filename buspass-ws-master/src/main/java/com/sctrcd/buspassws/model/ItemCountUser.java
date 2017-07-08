@@ -20,6 +20,8 @@ public class ItemCountUser {
     private int korisnickiPoeni;
     private Date datum;
     private int popust;
+    private String osnovnipopustCele, dodatnipopustCele1,dodatnipopustCele2,dodatnipopustCele3;
+
 
     public ItemCountUser() {
     }
@@ -91,5 +93,37 @@ public class ItemCountUser {
 
     public void setUnique(String unique) {
         this.unique = unique;
+    }
+
+    public String getOsnovnipopustCele() {
+        return osnovnipopustCele;
+    }
+
+    public void setOsnovnipopustCele(String osnovnipopustCele) {
+        this.osnovnipopustCele = osnovnipopustCele;
+    }
+
+    public String getDodatnipopustCele1() {
+        return dodatnipopustCele1;
+    }
+
+    public void setDodatnipopustCele1(String dodatnipopustCele1) {
+        this.dodatnipopustCele1 = dodatnipopustCele1;
+    }
+
+    public String getDodatnipopustCele2() {
+        return dodatnipopustCele2;
+    }
+
+    public void setDodatnipopustCele2(String dodatnipopustCele2) {
+        this.dodatnipopustCele2 = dodatnipopustCele2;
+    }
+
+    public String getDodatnipopustCele3() {
+        return dodatnipopustCele3;
+    }
+
+    public void setDodatnipopustCele3(String dodatnipopustCele3) {
+        this.dodatnipopustCele3 = dodatnipopustCele3;
     }
 }

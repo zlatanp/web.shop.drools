@@ -20,6 +20,9 @@ public class ItemCount {
     public String nadkategorija;
     public int maxDiscount;
 
+    private String stavkaRacunaPopust;
+    private String dodatnipopust1, dodatnipopust2, dodatnipopust3;
+
     public ItemCount() { }
 
     public ItemCount(Item i, int count, boolean wholesale, double price, boolean snizeno, Date datum, int popust, String supercat, int maxDiscount) {
@@ -105,5 +108,37 @@ public class ItemCount {
 
     public void setMaxDiscount(int maxDiscount) {
         this.maxDiscount = maxDiscount;
+    }
+
+    public String getStavkaRacunaPopust() {
+        return stavkaRacunaPopust;
+    }
+
+    public void setStavkaRacunaPopust(String stavkaRacunaPopust) {
+        this.stavkaRacunaPopust = stavkaRacunaPopust;
+    }
+
+    public String getDodatnipopust1() {
+        return dodatnipopust1;
+    }
+
+    public void setDodatnipopust1(String dodatnipopust1) {
+        this.dodatnipopust1 = dodatnipopust1;
+    }
+
+    public String getDodatnipopust2() {
+        return dodatnipopust2;
+    }
+
+    public void setDodatnipopust2(String dodatnipopust2) {
+        this.dodatnipopust2 = dodatnipopust2;
+    }
+
+    public String getDodatnipopust3() {
+        return dodatnipopust3;
+    }
+
+    public void setDodatnipopust3(String dodatnipopust3) {
+        this.dodatnipopust3 = dodatnipopust3;
     }
 }
