@@ -57,6 +57,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li id="korpa"><a href="#" onclick="card()"><span class="glyphicon glyphicon-shopping-cart"></span> Card</a></li>
+                <li id="needMore"><a href="#" onclick="prikaziStaFali()"><span class="glyphicon glyphicon-bell" style="color:red"></span> Orders!</a></li>
                 <li><a id="usernamePlaceholder" href="#" onclick="profile()"><span class="glyphicon glyphicon-user"></span></a></li>
                 <li><a href="#" onclick="logout()"><span class="glyphicon glyphicon-log-in"></span> Logout</a></li>
             </ul>
@@ -293,6 +294,14 @@
         <br>
         <br>
         <button onclick="return addToCardFinal()" id="addToCardFinal">Save</button>
+    </div>
+
+    <div id="dialog8" title="How Much">
+        <p hidden id="itItemasetuj"></p>
+        <input name="count" type="number" min="1" value="1" id="koliko">
+        <br>
+        <br>
+        <button onclick="return poruciKolicinu()" >Save</button>
     </div>
 </div>
 </body>

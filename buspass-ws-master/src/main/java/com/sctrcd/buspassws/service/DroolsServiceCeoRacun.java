@@ -52,6 +52,16 @@ public class DroolsServiceCeoRacun {
         return doneItem;
     }
 
+    public ItemCount updateItem(Item itemi) {
+        KieSession kieSession = kieContainer.newKieSession("updateItem");
+        kieSession.insert(itemi);
+        kieSession.fireAllRules();
+
+        ItemCount doneItem = findItemCount(kieSession);
+        kieSession.dispose();
+        return doneItem;
+    }
+
     /**
      * Search the {@link KieSession} for bus passes.
      */

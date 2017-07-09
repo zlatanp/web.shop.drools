@@ -17,20 +17,27 @@ $(document).ready(function(){
    if(type === "buyer"){
         $('#istorija').show();
         $('#korpa').show();
+        $('#needMore').hide();
+
    }else{
        $('#istorija').hide();
        $('#korpa').hide();
    }
 
-   if(type === "manager")
-        managerOnload();
+   if(type === "manager") {
+       $('#needMore').hide();
+       managerOnload();
+
+   }
 
     if(type === "seller") {
+        $('#needMore').hide();
         $('#center').html('');
         $('#center').append('<h3>Spisak racuna sa statusom: </h3>');
         $('#center').append('<select onchange="changeStatus()"  name="selector" id="selector"><option value="PORUCEN">Porucen</option><option value="REALIZOVAN">Realizovan</option><option value="OTKAZAN">Otkazan</option></select>');
         $('#center').append('<div id="racunKontejner"></div>');
         prodavacOnLoad("PORUCEN");
+        proveriZalihe();
 
     }
 
@@ -141,6 +148,21 @@ $( function() {
           });
 
       });
+
+    $( function() {
+        $("#dialog8").dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 500
+            },
+            hide: {
+                effect: "explode",
+                duration: 500
+            }
+        });
+
+    });
 });
 
 function logout(){
@@ -1111,14 +1133,13 @@ function otkaziRacun(id){
             success: function (data) {
         }
     });
-    alert("Racun uspesno otkazan!");
+    toastr.success("Racun uspesno otkazan!");
     prodavacOnLoad("OTKAZAN");
 
     return false;
 }
 
 function obradiRacun(id){
-    alert("obradjujem" + id);
 
     $.ajax({
         type: 'GET',
@@ -1128,9 +1149,76 @@ function obradiRacun(id){
         success: function (data) {
         }
     });
-    alert("Racun uspesno obradjen!");
+    toastr.success("Racun uspesno obradjen!");
     prodavacOnLoad("PORUCEN");
 
 
     return false;
+}
+
+function proveriZalihe(){
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/proveriZalihe',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            if(data.length>0){
+                $('#needMore').show();
+            }else{
+                $('#needMore').hide();
+            }
+        }
+    });
+
+}
+
+function prikaziStaFali(){
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/proveriZalihe',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data);
+            if (data.length > 0) {
+                $('#needMore').show();
+                $('#center').html('');
+                $('#center').append('<h3>You need to order next items:</h3><br>');
+                $('#center').append('<table id="itemTable1" border="1"><tr><th>&nbsp;&nbsp;Category</th><th>&nbsp;&nbsp;Code</th><th>&nbsp;&nbsp;Name</th><th>&nbsp;&nbsp;Price</th><th>&nbsp;&nbsp;QuantityInShop</th><th>&nbsp;&nbsp;Min. Quantity</th></tr></table>');
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].statusOfRecord == "ACTIVE") {
+                        $('#itemTable1').append('<tr><td>&nbsp;&nbsp;' + data[i].category + '</td><td>&nbsp;&nbsp;' + data[i].code + '</td><td>&nbsp;&nbsp;' + data[i].name + '</td><td>&nbsp;&nbsp;' + data[i].price + '</td><td>&nbsp;&nbsp;' + data[i].quantityInShop + '</td><td>&nbsp;&nbsp;' + data[i].minQuantityOnStock + '</td><td><button onclick="return poruciJos(\''+ data[i].code +'\')">Order</button></td></tr>');
+                    }
+                }
+            }else{
+                    $('#needMore').hide();
+            }
+        }
+    });
+}
+
+function poruciJos(code){
+    $("#dialog8").dialog("open");
+    $('#itItemasetuj').text(code);
+
+    return false;
+}
+
+function poruciKolicinu(){
+    var code = $('#itItemasetuj').text();
+    var kolicina = $('#koliko').val();
+
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/poruciKolicinu',
+        dataType: 'json',
+        data: {code : code, kolicina : kolicina},
+        success: function (data) {
+        }
+    });
+
+    $("#dialog8").dialog("close");
+    toastr.success("Succes order!");
+    window.setTimeout(function(){location.reload()},2000);
+
 }

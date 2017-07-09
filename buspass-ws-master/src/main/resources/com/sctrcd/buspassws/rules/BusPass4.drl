@@ -1,0 +1,13 @@
+package com.sctrcd.busspassws.rules
+
+import com.sctrcd.buspassws.model.*;
+
+rule "isneeded" salience 100
+lock-on-active
+    no-loop
+    when
+       $i: Item(getQuantityInShop() < getMinQuantityOnStock())
+
+    then
+       modify ($i) { setNeedMore(true) }
+    end

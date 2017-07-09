@@ -14,4 +14,8 @@
         <ksession name="updateUser" />
     </kbase>
 
+    <kbase name="BusPass4" packages="com.sctrcd.buspassws.rules">
+        <ksession name="updateItem" />
+    </kbase>
+
 </kmodule>

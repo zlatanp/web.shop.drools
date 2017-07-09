@@ -259,5 +259,35 @@ public class CardController {
         }
     }
 
+    @RequestMapping(value = "/proveriZalihe", method = RequestMethod.GET, produces = "application/json")
+    public ArrayList<Item> proveriZalihe() {
+        ArrayList<Item> potrebniItemi = new ArrayList<Item>();
+
+        List<Item> sviItemi = itemRepository.findAll();
+
+
+        //drools things
+        for (Item it: sviItemi) {
+            droolsServiceCeoRacun.updateItem(it);
+        }
+
+
+
+
+        for (Item i: sviItemi) {
+            if(i.isNeedMore())
+                potrebniItemi.add(i);
+        }
+
+        return potrebniItemi;
+    }
+
+    @RequestMapping(value = "/poruciKolicinu", method = RequestMethod.GET, produces = "application/json")
+    public void poruciKolicinu(@RequestParam("code") String code, @RequestParam("kolicina") String kolicina) {
+        Item i = itemRepository.findByCode(code);
+        i.setQuantityInShop(i.getQuantityInShop() + Integer.parseInt(kolicina));
+        itemRepository.save(i);
+    }
+
 }
 
