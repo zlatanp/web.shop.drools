@@ -1,23 +1,37 @@
 package com.sctrcd.buspassws.model;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by zlatan on 7/9/17.
  */
 public class SviItemi {
 
-    public ArrayList<Item> allItems;
+    public Item items;
+    public Date datum;
 
     public SviItemi() {
-        this.allItems = new ArrayList<Item>();
     }
 
-    public ArrayList<Item> getAllItems() {
-        return allItems;
+    public SviItemi(Item items, Date datum) {
+        this.items = items;
+        this.datum = datum;
     }
 
-    public void setAllItems(ArrayList<Item> allItems) {
-        this.allItems = allItems;
+    public Item getItems() {
+        return items;
+    }
+
+    public void setItems(Item items) {
+        this.items = items;
+    }
+
+    public Date getDatum() {
+        return datum;
+    }
+
+    public void setDatum(Date datum) {
+        this.datum = datum;
     }
 }

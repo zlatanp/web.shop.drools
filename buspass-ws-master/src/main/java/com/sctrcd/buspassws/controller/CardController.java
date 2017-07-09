@@ -142,6 +142,49 @@ public class CardController {
         }
 
         System.out.println(" card: " + card.getItems().get(0).getItem().getPrice());
+
+        //Kreiraj 2% za stavku ako je kupovana pre 15 dana
+
+        ArrayList<SviItemi> istorijaKupovina = new ArrayList<SviItemi>();
+
+        List<ItemCountUser> istorija = cardRepository.findAll();
+        for (ItemCountUser itemIstorija: istorija) {
+            if(itemIstorija.getU().getId().equals(card.getU().getId()))
+                for(int j=0; j< itemIstorija.getItems().size(); j++){
+                    SviItemi si = new SviItemi(itemIstorija.getItems().get(j).getItem(), itemIstorija.getDatum());
+                    istorijaKupovina.add(si);
+                }
+        }
+
+
+        for (SviItemi it : istorijaKupovina){
+            for(ItemCount i : card.getItems()){
+                if(it.getItems().getCode().equals(i.getItem().getCode())){
+                    Date datumKupovine = it.getDatum();
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(datumKupovine);
+                    cal.add(Calendar.DAY_OF_MONTH, 15);
+                    datumKupovine = cal.getTime();
+
+                    if(datumKupovine.after(i.getDatum())){
+                        i.setDodatnipopust1("-2%");
+                        i.setPopust(i.getPopust() + 2);
+                    }else{
+                        Date datumKupovine2 = it.getDatum();
+                        Calendar cal2 = Calendar.getInstance();
+                        cal2.setTime(datumKupovine2);
+                        cal2.add(Calendar.MONTH, 1);
+                        datumKupovine2 = cal2.getTime();
+
+                        if(datumKupovine2.after(i.getDatum())){
+                            i.setDodatnipopust1("-1%");
+                            i.setPopust(i.getPopust() + 1);
+                        }
+                    }
+                }
+            }
+        }
+
         //drools things
         for (int i = 0; i < card.getItems().size(); i++) {
 
