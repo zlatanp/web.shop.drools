@@ -7,7 +7,7 @@ lock-on-active
     no-loop
     when
        $r: ItemCountUser($cenaRacuna: getCena())
-       $i: User( $brojPoena: getBuyerProfile().getRewardPoints(), $koeficijent: getBuyerProfile().getCategory().getCoefficient())
+       $i: User( $brojPoena: getBuyerProfile().getRewardPoints(), $koeficijent: getBuyerProfile().getCategory().getCoefficient(), $min: getBuyerProfile().getCategory().getFrom(), $max: getBuyerProfile().getCategory().getTo(), $cenaRacuna >= $min && $cenaRacuna<= $max)
     then
        modify ($i) { getBuyerProfile().setRewardPoints($brojPoena + ($cenaRacuna * $koeficijent / 100))}
     end
