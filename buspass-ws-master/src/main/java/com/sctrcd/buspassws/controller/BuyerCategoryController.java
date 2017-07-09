@@ -1,7 +1,10 @@
 package com.sctrcd.buspassws.controller;
 
 import com.sctrcd.buspassws.model.BuyerCategory;
+import com.sctrcd.buspassws.model.BuyerProfile;
+import com.sctrcd.buspassws.model.User;
 import com.sctrcd.buspassws.repository.BuyerCategoryRepository;
+import com.sctrcd.buspassws.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +22,10 @@ public class BuyerCategoryController {
 
     @Autowired
     private BuyerCategoryRepository repository;
+
+
+    @Autowired
+    private UserRepository userRepository;
 
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = "application/json")
     public String addCategory(@RequestParam("code") String code, @RequestParam("name") String name, @RequestParam("from") int from, @RequestParam("to") int to, @RequestParam("coefficient") int coefficient){
@@ -67,6 +74,17 @@ public class BuyerCategoryController {
         c.setCoefficient(coefficient);
         repository.save(c);
 
+        List<User> korisnici = userRepository.findAll();
+
+        for (User u: korisnici) {
+            BuyerProfile b = u.getBuyerProfile();
+            if (b != null) {
+                if (b.getCategory().getCode().equals(c.getCode())) {
+                    u.getBuyerProfile().setCategory(c);
+                    userRepository.save(u);
+                }
+            }
+        }
         return "ok";
     }
 }
