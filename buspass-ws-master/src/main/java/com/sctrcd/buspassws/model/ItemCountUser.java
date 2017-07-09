@@ -21,6 +21,7 @@ public class ItemCountUser {
     private Date datum;
     private int popust;
     private String osnovnipopustCele, dodatnipopustCele1,dodatnipopustCele2,dodatnipopustCele3;
+    private String status;
 
 
     public ItemCountUser() {
@@ -125,5 +126,13 @@ public class ItemCountUser {
 
     public void setDodatnipopustCele3(String dodatnipopustCele3) {
         this.dodatnipopustCele3 = dodatnipopustCele3;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

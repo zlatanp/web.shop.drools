@@ -12,12 +12,27 @@ var tempCard = new Array();
 
 $(document).ready(function(){
 
+    $('#usernamePlaceholder').html('<span class="glyphicon glyphicon-user"></span> ' + username);
 
-   if(type === "buyer")
-        $('#usernamePlaceholder').html('<span class="glyphicon glyphicon-user"></span> ' + username);
+   if(type === "buyer"){
+        $('#istorija').show();
+        $('#korpa').show();
+   }else{
+       $('#istorija').hide();
+       $('#korpa').hide();
+   }
 
    if(type === "manager")
         managerOnload();
+
+    if(type === "seller") {
+        $('#center').html('');
+        $('#center').append('<h3>Spisak racuna sa statusom: </h3>');
+        $('#center').append('<select onchange="changeStatus()"  name="selector" id="selector"><option value="PORUCEN">Porucen</option><option value="REALIZOVAN">Realizovan</option><option value="OTKAZAN">Otkazan</option></select>');
+        $('#center').append('<div id="racunKontejner"></div>');
+        prodavacOnLoad("PORUCEN");
+
+    }
 
     //TODO ajax call for reading categories
     loadAllCategories();
@@ -445,7 +460,7 @@ function addNewUserCategory(){
         });
 
     $("#dialog3").dialog('close');
-    loadAllBuyerCategories();
+    buyerCategories();
 }
 
 function loadAllBuyerCategories(){
@@ -1025,6 +1040,90 @@ function showHistory(){
 
         }
     });
+
+    return false;
+}
+
+function prodavacOnLoad(status){
+    $('#racunKontejner').html('');
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/getAllRacuni',
+        dataType: 'json',
+        data: {username : username},
+        success: function(data){
+            console.log(data);
+            if(data.length > 0){
+
+                for(var i=0; i<data.length; i++) {
+                    var obj = data[i];
+                    if (obj.status == status) {
+                        $('#racunKontejner').append('<table id="historyTable' + i + '" border="1"><tr><th>Datum</th><th>Stvarna cena</th><th>Cena sa popustom</th><th>Dodatni Popusti</th><th>Osnovni popust</th></tr></table>');
+                        $('#historyTable' + i + '').append('<tr><td>' + String(new Date(obj.datum).subtractdHours(2)) + '</td><td>&nbsp;&nbsp;' + obj.prvaCena + '$</td><td>&nbsp;&nbsp;' + obj.cena + '$</td><td>P1:' + obj.dodatnipopustCele1 + ', P2:' + obj.dodatnipopustCele2 + ', P3:' + obj.dodatnipopustCele3 + '</td><td>&nbsp;&nbsp;' + obj.osnovnipopustCele + '</td></tr>');
+                        $('#racunKontejner').append('<table id="itemTable' + i + '" border="1"><tr><th>Naziv</th><th>Cena</th><th>Kolicina</th><th>Dodatni Popust</th><th>Osnovni popust</th><th>Cena sa popustom</th></tr></table>');
+
+                        var itemi = obj.items;
+                        for (var j = 0; j < itemi.length; j++) {
+                            item = itemi[j];
+                            $('#itemTable' + i + '').append('<tr><td>&nbsp;&nbsp;' + item.item.name + '</td><td>&nbsp;&nbsp;' + item.item.price + '$</td><td>&nbsp;&nbsp;' + item.count + '</td><td>Popust1:' + item.dodatnipopust1 + ', Popust2:' + item.dodatnipopust2 + ', Popust3:' + item.dodatnipopust3 + '</td><td>&nbsp;&nbsp;' + item.stavkaRacunaPopust + '</td><td>&nbsp;&nbsp;' + item.price + '$</td></tr>');
+
+                        }
+                        if(obj.status == "PORUCEN")
+                            $('#racunKontejner').append('<button onclick="return otkaziRacun(\''+ obj.unique +'\')">Otkazi</button><button onclick="return obradiRacun(\''+ obj.unique +'\')">Obradi</button>');
+
+                        $('#racunKontejner').append('<br>');
+                        $('#racunKontejner').append('<br>');
+                    }
+                }
+            }else{
+                $('#racunKontejner').append('<h3>History is empty!</h3>');
+            }
+
+
+        }
+    });
+
+    return false;
+}
+
+function changeStatus(){
+   var value = $('select[name=selector]').val()
+
+    prodavacOnLoad(value);
+
+    return false;
+}
+
+function otkaziRacun(id){
+
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/otkaziRacun',
+        dataType: 'json',
+        data: {unique : id},
+            success: function (data) {
+        }
+    });
+    alert("Racun uspesno otkazan!");
+    prodavacOnLoad("OTKAZAN");
+
+    return false;
+}
+
+function obradiRacun(id){
+    alert("obradjujem" + id);
+
+    $.ajax({
+        type: 'GET',
+        url: 'cardController/obradiRacun',
+        dataType: 'json',
+        data: {unique : id},
+        success: function (data) {
+        }
+    });
+    alert("Racun uspesno obradjen!");
+    prodavacOnLoad("PORUCEN");
+
 
     return false;
 }

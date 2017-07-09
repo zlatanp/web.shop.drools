@@ -4,6 +4,7 @@ import com.sctrcd.buspassws.enumeration.UserType;
 import com.sctrcd.buspassws.model.BuyerCategory;
 import com.sctrcd.buspassws.model.BuyerProfile;
 import com.sctrcd.buspassws.model.User;
+import com.sctrcd.buspassws.repository.BuyerCategoryRepository;
 import com.sctrcd.buspassws.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zlatan on 29.5.17..
@@ -23,6 +25,9 @@ public class MainRegistrationController {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    BuyerCategoryRepository kategorijaRepo;
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = "application/json")
@@ -39,8 +44,13 @@ public class MainRegistrationController {
         if(u != null) {
             return "used";
         }else {
-            BuyerCategory bc = new BuyerCategory("1", "Bronzani", 1,1,1);
-            BuyerProfile p = new BuyerProfile("neka adresa", 0, bc, null);
+            BuyerCategory bp = null;
+            List<BuyerCategory> sveKategorije = kategorijaRepo.findAll();
+            for (BuyerCategory b: sveKategorije) {
+                if(b.getName().equals("BRONZANI"))
+                    bp = b;
+            }
+            BuyerProfile p = new BuyerProfile("neka adresa", 0, bp, null);
             u = new User(username, pass, name, surname, UserType.BUYER, new Date());
             u.setBuyerProfile(p);
             repository.save(u);

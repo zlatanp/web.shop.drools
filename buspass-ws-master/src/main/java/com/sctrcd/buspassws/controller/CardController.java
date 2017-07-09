@@ -168,7 +168,7 @@ public class CardController {
         CardControll(card);
 
         System.out.println("cena na kraj: " + card.getCena() + " popust: " + card.getPopust());
-
+        card.setStatus("PORUCEN");
         cardRepository.save(card);
 
         return card;
@@ -181,9 +181,6 @@ public class CardController {
         ItemCountUser itemCard = cardRepository.findByUnique(unique);
         itemCard.setCena(Double.parseDouble(pravaCena));
         cardRepository.save(itemCard);
-
-        User u = itemCard.getU();
-        u.getBuyerProfile().setRewardPoints(u.getBuyerProfile().getRewardPoints() - Integer.parseInt(points));
 
         //TODO
         //useru setuj nove poene
@@ -203,6 +200,57 @@ public class CardController {
         }
 
         return myCards;
+    }
+
+    @RequestMapping(value = "/getAllRacuni", method = RequestMethod.GET, produces = "application/json")
+    public ArrayList<ItemCountUser> getAllRacuni(@RequestParam("username") String username) {
+        List<ItemCountUser> allCards = cardRepository.findAll();
+        ArrayList<ItemCountUser> Cards = new ArrayList<ItemCountUser>();
+
+        for (ItemCountUser i: allCards) {
+                Cards.add(i);
+        }
+
+        return Cards;
+    }
+
+    @RequestMapping(value = "/otkaziRacun", method = RequestMethod.GET, produces = "application/json")
+    public void otkaziRacun(@RequestParam("unique") String unique) {
+        ItemCountUser racun = cardRepository.findByUnique(unique);
+        racun.setStatus("OTKAZAN");
+
+        cardRepository.save(racun);
+    }
+
+    @RequestMapping(value = "/obradiRacun", method = RequestMethod.GET, produces = "application/json")
+    public void obradiRacun(@RequestParam("unique") String unique) {
+        ItemCountUser racun = cardRepository.findByUnique(unique);
+
+        boolean fail = false;
+        for (ItemCount c : racun.getItems()) {
+            int kolicinaZaKupiit = c.getCount();
+            int kolicinaURadnji = c.getItem().getQuantityInShop();
+
+            if (kolicinaZaKupiit > kolicinaURadnji) {
+                fail = true;
+                break;
+            }
+        }
+
+        if (fail) {
+            racun.setStatus("OTKAZAN");
+            cardRepository.save(racun);
+        } else {
+            for (ItemCount c : racun.getItems()) {
+                int kolicinaZaKupiit = c.getCount();
+                int kolicinaURadnji = c.getItem().getQuantityInShop();
+
+                c.getItem().setQuantityInShop(kolicinaURadnji - kolicinaZaKupiit);
+                itemRepository.save(c.getItem());
+            }
+            racun.setStatus("REALIZOVAN");
+            cardRepository.save(racun);
+        }
     }
 
 }
