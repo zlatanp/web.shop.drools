@@ -1049,7 +1049,8 @@ function showHistory(){
                 for(var i=0; i<data.length; i++) {
                     $('#center').append('<table id="historyTable'+ i +'" border="1"><tr><th>Datum</th><th>Stvarna cena</th><th>Cena sa popustom</th><th>Dodatni Popusti</th><th>Osnovni popust</th></tr></table>');
                     var obj = data[i];
-                    $('#historyTable'+ i +'').append('<tr><td>'+ String(new Date(obj.datum).subtractdHours(2)) +'</td><td>&nbsp;&nbsp;' + obj.prvaCena + '$</td><td>&nbsp;&nbsp;' + obj.cena + '$</td><td>P1:' + obj.dodatnipopustCele1 + ', P2:' + obj.dodatnipopustCele2 + ', P3:' + obj.dodatnipopustCele3 + '</td><td>&nbsp;&nbsp;' + obj.osnovnipopustCele + '</td></tr>');
+                    var datum = String(new Date(obj.datum).subtractdHours(2));
+                    $('#historyTable'+ i +'').append('<tr><td>'+ datum.substring(3, 14) +'</td><td>&nbsp;&nbsp;' + obj.prvaCena + '$</td><td>&nbsp;&nbsp;' + obj.cena + '$</td><td>P1:' + obj.dodatnipopustCele1 + ', P2:' + obj.dodatnipopustCele2 + ', P3:' + obj.dodatnipopustCele3 + '</td><td>&nbsp;&nbsp;' + obj.osnovnipopustCele + '</td></tr>');
                     $('#center').append('<table id="itemTable'+ i +'" border="1"><tr><th>Naziv</th><th>Cena</th><th>Kolicina</th><th>Dodatni Popust</th><th>Osnovni popust</th><th>Cena sa popustom</th></tr></table>');
 
                     var itemi = obj.items;
@@ -1088,7 +1089,8 @@ function prodavacOnLoad(status){
                     var obj = data[i];
                     if (obj.status == status) {
                         $('#racunKontejner').append('<table id="historyTable' + i + '" border="1"><tr><th>Datum</th><th>Stvarna cena</th><th>Cena sa popustom</th><th>Dodatni Popusti</th><th>Osnovni popust</th></tr></table>');
-                        $('#historyTable' + i + '').append('<tr><td>' + String(new Date(obj.datum).subtractdHours(2)) + '</td><td>&nbsp;&nbsp;' + obj.prvaCena + '$</td><td>&nbsp;&nbsp;' + obj.cena + '$</td><td>P1:' + obj.dodatnipopustCele1 + ', P2:' + obj.dodatnipopustCele2 + ', P3:' + obj.dodatnipopustCele3 + '</td><td>&nbsp;&nbsp;' + obj.osnovnipopustCele + '</td></tr>');
+                        var dejt = String(new Date(obj.datum).subtractdHours(2));
+                        $('#historyTable' + i + '').append('<tr><td>' + dejt.substring(3, 14) + '</td><td>&nbsp;&nbsp;' + obj.prvaCena + '$</td><td>&nbsp;&nbsp;' + obj.cena + '$</td><td>P1:' + obj.dodatnipopustCele1 + ', P2:' + obj.dodatnipopustCele2 + ', P3:' + obj.dodatnipopustCele3 + '</td><td>&nbsp;&nbsp;' + obj.osnovnipopustCele + '</td></tr>');
                         $('#racunKontejner').append('<table id="itemTable' + i + '" border="1"><tr><th>Naziv</th><th>Cena</th><th>Kolicina</th><th>Dodatni Popust</th><th>Osnovni popust</th><th>Cena sa popustom</th></tr></table>');
 
                         var itemi = obj.items;

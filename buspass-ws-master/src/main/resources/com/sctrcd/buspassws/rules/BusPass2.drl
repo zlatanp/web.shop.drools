@@ -31,7 +31,7 @@ lock-on-active
     when
        $i: ItemCountUser( $popust: getPopust(), $tipKupca: getU().getBuyerProfile().getCategory.getName, $tipKupca == "SREBRNI" || $tipKupca == "ZLATNI")
     then
-       modify ($i) { setPopust($popust + 1), setDodatnipopustCele2("1%, SREBRNI ILI ZLATNI kupac")}
+       modify ($i) { setPopust($popust + 1), setDodatnipopustCele2("1% GOLD/SILVER")}
     end
 
 
