@@ -31,8 +31,8 @@ public class BuyerProfile {
 		return rewardPoints;
 	}
 
-	public void setRewardPoints(int rewardPoints) {
-		this.rewardPoints = rewardPoints;
+	public void setRewardPoints(double rewardPoints) {
+		this.rewardPoints = (int)rewardPoints;
 	}
 
 	public BuyerCategory getCategory() {

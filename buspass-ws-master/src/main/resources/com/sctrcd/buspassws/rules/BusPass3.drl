@@ -1,0 +1,13 @@
+package com.sctrcd.busspassws.rules
+
+import com.sctrcd.buspassws.model.*;
+
+rule "updateNagradnePoene" salience 100
+lock-on-active
+    no-loop
+    when
+       $r: ItemCountUser($cenaRacuna: getCena())
+       $i: User( $brojPoena: getBuyerProfile().getRewardPoints(), $koeficijent: getBuyerProfile().getCategory().getCoefficient())
+    then
+       modify ($i) { getBuyerProfile().setRewardPoints($brojPoena + ($cenaRacuna * $koeficijent / 100))}
+    end

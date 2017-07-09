@@ -226,6 +226,7 @@ public class CardController {
     public void obradiRacun(@RequestParam("unique") String unique) {
         ItemCountUser racun = cardRepository.findByUnique(unique);
 
+        User u = racun.getU();
         boolean fail = false;
         for (ItemCount c : racun.getItems()) {
             int kolicinaZaKupiit = c.getCount();
@@ -250,6 +251,11 @@ public class CardController {
             }
             racun.setStatus("REALIZOVAN");
             cardRepository.save(racun);
+
+            //update kupca
+            droolsServiceCeoRacun.updateUser(racun, u);
+            userRepository.save(u);
+
         }
     }
 
